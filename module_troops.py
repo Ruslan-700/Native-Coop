@@ -7,6 +7,7 @@ from header_skills import *
 from ID_factions import *
 from ID_items import *
 from ID_scenes import *
+from module_constants import *
 
 ####################################################################################################################
 #  Each troop contains the following fields:
@@ -257,6 +258,11 @@ troops = [
 ####################################################################################################################
 # Troops before this point are hardwired into the game and their order should not be changed!
 ####################################################################################################################
+
+    ] + [ ["player_%04d"%(player_index),"Player","Player",tf_hero|tf_unmoveable_in_party_window,no_scene,reserved,fac_player_faction,
+   [],
+   str_4|agi_4|int_4|cha_4,wp(15),0,0x000000018000000136db6db6db6db6db00000000001db6db0000000000000000] for player_index in range(0, players_number) ] + [
+
   ["find_item_cheat","find_item_cheat","find_item_cheat",tf_hero|tf_is_merchant,no_scene,reserved,fac_commoners,[],def_attrib,0,knows_common|knows_inventory_management_10,0],
   ["random_town_sequence","Random Town Sequence","Random Town Sequence",tf_hero,no_scene,reserved,fac_commoners,[],def_attrib,0,knows_common|knows_inventory_management_10,0],
   ["tournament_participants","Tournament Participants","Tournament Participants",tf_hero,no_scene,reserved,fac_commoners,[],def_attrib,0,knows_common|knows_inventory_management_10,0],

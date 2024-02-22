@@ -4,6 +4,7 @@ from ID_troops import *
 from ID_factions import *
 from ID_party_templates import *
 from ID_map_icons import *
+from module_constants import *
 
 ####################################################################################################################
 #  Each party record contains the following fields:
@@ -41,10 +42,12 @@ pf_village = pf_is_static|pf_always_visible|pf_hide_defenders|pf_label_small
 
 
 parties = [
-  ("main_party","Main Party",icon_player|pf_limit_members, no_menu, pt_none,fac_player_faction,0,ai_bhvr_hold,0,(17, 52.5),[(trp_player,1,0)]),
+  ("main_party","Main Party",icon_player|pf_limit_members|pf_disabled, no_menu, pt_none,fac_player_faction,0,ai_bhvr_hold,0,(17, 52.5),[(trp_player,1,0)]),
   ("temp_party","{!}temp_party",pf_disabled, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0,0),[]),
   ("camp_bandits","{!}camp_bandits",pf_disabled, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(1,1),[(trp_temp_troop,3,0)]),
 #parties before this point are hardwired. Their order should not be changed.
+
+    ] + [ ("player_party_%04d"%(player_index),"Player Party",icon_player|pf_limit_members|pf_disabled, no_menu, pt_none,fac_player_faction,0,ai_bhvr_hold,0,(17, 52.5),[(trp_player_0000+player_index,1,0)]) for player_index in range(0, players_number) ] + [
 
   ("temp_party_2","{!}temp_party_2",pf_disabled, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0,0),[]),
 #Used for calculating casulties.
