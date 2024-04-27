@@ -4050,4 +4050,18 @@ simple_triggers = [
    []),
   (24,
    []),
+   
+	(ti_server_player_joined,
+	[
+		(store_trigger_param_1, ":player_no"),
+		
+	]),
+	
+
+	(ti_on_player_exit,
+	[
+		(store_trigger_param_1, ":player_no"),
+		
+	]),	
+	 
 ]
