@@ -44,6 +44,8 @@ simple_triggers = [
         (party_set_position, "p_training_ground_3", pos0),
       (try_end),
 	  
+	  (neg|game_in_multiplayer_mode),
+	  
       (gt,"$auto_besiege_town",0),
       (gt,"$g_player_besiege_town", 0),
       (ge, "$g_siege_method", 1),
@@ -57,6 +59,8 @@ simple_triggers = [
 
   (0,
    [
+      (neg|game_in_multiplayer_mode),
+   
       (try_begin),
         (eq, "$bug_fix_version", 0),     
       
@@ -97,7 +101,9 @@ simple_triggers = [
 
 #Auto-menu
   (0,
-   [          
+   [
+     (neg|game_in_multiplayer_mode),
+	 
      (try_begin),
        (gt, "$g_last_rest_center", 0),
        (party_get_battle_opponent, ":besieger_party", "$g_last_rest_center"),
@@ -148,6 +154,8 @@ simple_triggers = [
 #Notification menus
   (0,
    [
+     (neg|game_in_multiplayer_mode),
+	 
      (troop_slot_ge, "trp_notification_menu_types", 0, 1),
      (troop_get_slot, ":menu_type", "trp_notification_menu_types", 0),
      (troop_get_slot, "$g_notification_menu_var1", "trp_notification_menu_var1", 0),
@@ -178,6 +186,8 @@ simple_triggers = [
 
   (0,
 	[
+	  (neg|game_in_multiplayer_mode),
+	  
 	  #escort caravan quest auto dialog trigger
 	  (try_begin),
         (eq, "$caravan_escort_state", 1),
@@ -208,6 +218,8 @@ simple_triggers = [
 	
 (24, 
 [
+    (neg|game_in_multiplayer_mode),
+	
     (try_for_range, ":kingdom_no", npc_kingdoms_begin, npc_kingdoms_end),
       (faction_get_slot, ":faction_morale", ":kingdom_no",  slot_faction_morale_of_player_troops),
 
@@ -225,6 +237,9 @@ simple_triggers = [
 	
  (4, #Locate kingdom ladies
     [
+	  (this_or_next|multiplayer_is_server),
+      (neg|game_in_multiplayer_mode),
+	
       #change location for all ladies
       (try_for_range, ":troop_id", kingdom_ladies_begin, kingdom_ladies_end),
         (neg|troop_slot_ge, ":troop_id", slot_troop_prisoner_of_party, 0),
@@ -237,6 +252,9 @@ simple_triggers = [
 	
  (2, #Error check for multiple parties on the map
 	[
+	(this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+	
 	(eq, "$cheat_mode", 1),
 	(assign, ":debug_menu_noted", 0),
 	(try_for_parties, ":party_no"),
@@ -263,6 +281,8 @@ simple_triggers = [
    
  (24, #Kingdom ladies send messages
  [ 
+    (neg|game_in_multiplayer_mode),
+	
 	(try_begin),
 		(neg|check_quest_active, "qst_visit_lady"),
 		(neg|troop_slot_ge, "trp_player", slot_troop_prisoner_of_party, 1),
@@ -309,6 +329,8 @@ simple_triggers = [
 # This trigger will check if player's raid has been completed and will lead control to village menu.
   (1,
    [
+      (neg|game_in_multiplayer_mode),
+	  
       (ge,"$g_player_raiding_village",1),
       (try_begin),
         (neq, "$g_player_is_captive", 0),
@@ -337,6 +359,8 @@ simple_triggers = [
   #Pay day.
   (24 * 7,
    [
+     (neg|game_in_multiplayer_mode),
+   
      (assign, "$g_presentation_lines_to_display_begin", 0),
      (assign, "$g_presentation_lines_to_display_end", 15),
      (assign, "$g_apply_budget_report_to_gold", 1),
@@ -349,6 +373,8 @@ simple_triggers = [
   # Oath fulfilled -- ie, mercenary contract expired?
   (24,
    [
+      (neg|game_in_multiplayer_mode),
+	  
       (le, "$auto_menu", 0),
       (gt, "$players_kingdom", 0),
       (neq, "$players_kingdom", "fac_player_supporters_faction"),
@@ -374,6 +400,8 @@ simple_triggers = [
   # Reducing luck by 1 in every 180 hours
   (180,
    [
+     (neg|game_in_multiplayer_mode),
+	 
      (val_sub, "$g_player_luck", 1),
      (val_max, "$g_player_luck", 0),
     ]),
@@ -381,12 +409,16 @@ simple_triggers = [
 	#courtship reset
   (72,
    [
+     (neg|game_in_multiplayer_mode),
+     
      (assign, "$lady_flirtation_location", 0),
     ]),
 
 	#reset time to spare
   (4,
    [
+     (neg|game_in_multiplayer_mode),
+	 
      (assign, "$g_time_to_spare", 1),
 
     (try_begin),
@@ -400,6 +432,8 @@ simple_triggers = [
   # Banner selection menu
   (24,
    [
+    (neg|game_in_multiplayer_mode),
+	
     (eq, "$g_player_banner_granted", 1),
     (troop_slot_eq, "trp_player", slot_troop_banner_scene_prop, 0),
     (le,"$auto_menu",0),
@@ -412,6 +446,8 @@ simple_triggers = [
   # Party Morale: Move morale towards target value.
   (24,
    [
+      (neg|game_in_multiplayer_mode),
+	  
       (call_script, "script_get_player_party_morale_values"),
       (assign, ":target_morale", reg0),
       (party_get_morale, ":cur_morale", "p_main_party"),
@@ -435,6 +471,9 @@ simple_triggers = [
 #Party AI: pruning some of the prisoners in each center (once a week)
   (24*7,
    [
+       (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+		
        (try_for_range, ":center_no", centers_begin, centers_end),
          (party_get_num_prisoner_stacks, ":num_prisoner_stacks",":center_no"),
          (try_for_range_backwards, ":stack_no", 0, ":num_prisoner_stacks"),
@@ -454,6 +493,9 @@ simple_triggers = [
   #Adding net incomes to centers (once a week)
   (24*7,
    [
+       (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+   
        (try_for_range, ":troop_no", active_npcs_begin, active_npcs_end),
          (troop_get_slot, ":cur_debt", ":troop_no", slot_troop_player_debt),#Increasing debt
          (val_mul, ":cur_debt", 101),
@@ -487,6 +529,9 @@ simple_triggers = [
   #Hiring men with center wealths (once a day)
   (24,
    [
+     (this_or_next|multiplayer_is_server),
+     (neg|game_in_multiplayer_mode),
+   
      (try_for_range, ":troop_no", active_npcs_begin, active_npcs_end),
        (troop_slot_eq, ":troop_no", slot_troop_occupation, slto_kingdom_hero),
        (troop_get_slot, ":party_no", ":troop_no", slot_troop_leaded_party),
@@ -610,7 +655,9 @@ simple_triggers = [
 
   #Checking if the troops are resting at a half payment point
   (6,
-   [(store_current_day, ":cur_day"),
+   [(neg|game_in_multiplayer_mode),
+   
+   (store_current_day, ":cur_day"),
     (try_begin),
       (neq, ":cur_day", "$g_last_half_payment_check_day"),
       (assign, "$g_last_half_payment_check_day", ":cur_day"),
@@ -635,6 +682,9 @@ simple_triggers = [
 #diplomatic indices
   (24,
    [
+   (this_or_next|multiplayer_is_server),
+   (neg|game_in_multiplayer_mode),
+   
    (call_script, "script_randomly_start_war_peace_new", 1),
 
    (try_begin),
@@ -724,7 +774,10 @@ simple_triggers = [
 		
   # Give some xp to hero parties
    (48,
-   [      
+   [
+       (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+   
        (try_for_range, ":troop_no", active_npcs_begin, active_npcs_end),
          (troop_slot_eq, ":troop_no", slot_troop_occupation, slto_kingdom_hero),	     	     
 	              
@@ -798,12 +851,18 @@ simple_triggers = [
   # Process sieges
    (24,
    [
+       (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+   
        (call_script, "script_process_sieges"),
     ]),
 
   # Process village raids
    (2,
    [
+       (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+	   
        (call_script, "script_process_village_raids"),
     ]),
 
@@ -811,6 +870,9 @@ simple_triggers = [
   # Decide vassal ai
    (7,
     [
+	  (this_or_next|multiplayer_is_server),
+      (neg|game_in_multiplayer_mode),
+	   
       (call_script, "script_init_ai_calculation"),
       #(call_script, "script_decide_kingdom_party_ais"),
       (try_for_range, ":troop_no", active_npcs_begin, active_npcs_end),
@@ -907,7 +969,10 @@ simple_triggers = [
       ]),#
 
    (24,
-    [	  
+    [
+    (this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+	   
 	(try_for_range, ":kingdom_hero", active_npcs_begin, active_npcs_end),
 		(troop_get_slot, ":impatience", ":kingdom_hero", slot_troop_intrigue_impatience),
 		(val_sub, ":impatience", 5),
@@ -938,7 +1003,10 @@ simple_triggers = [
     #POLITICAL TRIGGERS
 	#POLITICAL TRIGGER #1`
    (8, #increased from 12
-    [	  
+    [
+    (this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+	
 	(call_script, "script_cf_random_political_event"),
 	
 	#Added Nov 2010 begins - do this twice
@@ -952,6 +1020,9 @@ simple_triggers = [
     #Check for lords without fiefs, auto-defections, etc
     (0.5,	
      [
+	    (this_or_next|multiplayer_is_server),
+        (neg|game_in_multiplayer_mode),
+	 
         (val_add, "$g_lord_long_term_count", 1),
         (try_begin),
           (neg|is_between, "$g_lord_long_term_count", "trp_kingdom_heroes_including_player_begin", active_npcs_end),
@@ -1181,6 +1252,9 @@ simple_triggers = [
   # Process alarms - perhaps break this down into several groups, with a modula
    (1, #this now calls 1/3 of all centers each time, thus hopefully lightening the CPU load
    [
+     (this_or_next|multiplayer_is_server),
+     (neg|game_in_multiplayer_mode),
+   
      (call_script, "script_process_alarms"),
 
      (call_script, "script_allow_vassals_to_join_indoor_battle"),
@@ -1191,6 +1265,9 @@ simple_triggers = [
   # Process siege ai
    (3,
    [
+      (this_or_next|multiplayer_is_server),
+      (neg|game_in_multiplayer_mode),
+   
       (store_current_hours, ":cur_hours"),
       (try_for_range, ":center_no", walled_centers_begin, walled_centers_end),
         (party_get_slot, ":besieger_party", ":center_no", slot_center_is_besieged_by),
@@ -1327,6 +1404,8 @@ simple_triggers = [
    
 
     (try_begin),
+	    (neg|game_in_multiplayer_mode),
+		
 		(ge, "$cheat_mode", 1),
 	
 		(try_for_range, ":king", "trp_kingdom_1_lord", "trp_knight_1_1"),		
@@ -1352,6 +1431,9 @@ simple_triggers = [
 	
 	
 	(try_end),
+	
+	 (this_or_next|multiplayer_is_server),
+     (neg|game_in_multiplayer_mode),
    
      (eq, "$g_recalculate_ais", 1),
      (assign, "$g_recalculate_ais", 0),
@@ -1361,6 +1443,9 @@ simple_triggers = [
     # Count faction armies
     (24,
     [
+	   (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+	
        (try_for_range, ":faction_no", kingdoms_begin, kingdoms_end),
          (call_script, "script_faction_recalculate_strength", ":faction_no"),
        (try_end),
@@ -1388,6 +1473,8 @@ simple_triggers = [
   # Change hero relation
    (36,
    [
+     (neg|game_in_multiplayer_mode),
+   
      (try_for_range, ":troop_no", heroes_begin, heroes_end),
        (troop_set_slot, ":troop_no", slot_troop_does_not_give_quest, 0),
      (try_end),
@@ -1400,6 +1487,9 @@ simple_triggers = [
   # Refresh merchant inventories
    (168,
    [
+      (this_or_next|multiplayer_is_server),
+      (neg|game_in_multiplayer_mode),
+	   
       (try_for_range, ":village_no", villages_begin, villages_end),
         (call_script, "script_refresh_village_merchant_inventory", ":village_no"),
       (try_end),
@@ -1409,6 +1499,9 @@ simple_triggers = [
   #Clearing slot_village_player_can_not_steal_cattle flags
    (48,
    [
+      (this_or_next|multiplayer_is_server),
+      (neg|game_in_multiplayer_mode),
+	  
       (try_for_range, ":village_no", villages_begin, villages_end),
         (call_script, "script_refresh_village_defenders", ":village_no"),
         (party_set_slot, ":village_no", slot_village_player_can_not_steal_cattle, 0),
@@ -1418,6 +1511,9 @@ simple_triggers = [
   # Refresh number of cattle in villages
   (24 * 7,
    [
+     (this_or_next|multiplayer_is_server),
+     (neg|game_in_multiplayer_mode),
+   
      (try_for_range, ":village_no", centers_begin, centers_end),
 	   (neg|is_between, ":village_no", castles_begin, castles_end),
 	   (party_get_slot, ":num_cattle", ":village_no", slot_center_head_cattle),
@@ -1493,6 +1589,9 @@ simple_triggers = [
    #Accumulate taxes
    (24 * 7,
    [
+      (this_or_next|multiplayer_is_server),
+      (neg|game_in_multiplayer_mode),
+   
       #Adding earnings to town lords' wealths.
       #Moved to troop does business
       #(try_for_range, ":center_no", centers_begin, centers_end),
@@ -1604,6 +1703,8 @@ simple_triggers = [
   # Only if the player is male -- female characters will be told that they should seek out a faction through NPCs, possibly
    (32,
    [
+     (neg|game_in_multiplayer_mode),
+	 
      (eq, "$players_kingdom", 0),
      (le, "$g_invite_faction", 0),
      (eq, "$g_player_is_captive", 0),
@@ -1676,6 +1777,9 @@ simple_triggers = [
     #recalculate lord random decision seeds once in every week
 	(24 * 7, 
 	[
+	  (this_or_next|multiplayer_is_server),
+      (neg|game_in_multiplayer_mode),
+	
       (try_for_range, ":troop_no", active_npcs_begin, active_npcs_end),
         (store_random_in_range, ":random", 0, 9999),
         (troop_set_slot, ":troop_no", slot_troop_temp_decision_seed, ":random"),
@@ -1755,6 +1859,9 @@ simple_triggers = [
   # Attach Lord Parties to the town they are in
   (0.1,
    [
+       (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+   
        (try_for_range, ":troop_no", heroes_begin, heroes_end),
          (troop_slot_eq, ":troop_no", slot_troop_occupation, slto_kingdom_hero),
          (troop_get_slot, ":troop_party_no", ":troop_no", slot_troop_leaded_party),
@@ -1804,6 +1911,8 @@ simple_triggers = [
   # Check escape chances of hero prisoners.
   (48,
    [
+       (neg|game_in_multiplayer_mode),
+	   
        (call_script, "script_randomly_make_prisoner_heroes_escape_from_party", "p_main_party", 50),
        (try_for_range, ":center_no", walled_centers_begin, walled_centers_end),
 ##         (party_slot_eq, ":center_no", slot_town_lord, "trp_player"),
@@ -1845,6 +1954,9 @@ simple_triggers = [
   # Respawn hero party after kingdom hero is released from captivity.
   (48, 
    [
+       (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+	
        (try_for_range, ":troop_no", active_npcs_begin, active_npcs_end),
          (troop_slot_eq, ":troop_no", slot_troop_occupation, slto_kingdom_hero),
 
@@ -1919,6 +2031,9 @@ simple_triggers = [
   # Spawn village farmer parties
   (24,
    [
+       (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+	
        (try_for_range, ":village_no", villages_begin, villages_end),
          (party_slot_eq, ":village_no", slot_village_state, svs_normal),
          (party_get_slot, ":farmer_party", ":village_no", slot_village_farmer_party),
@@ -1936,6 +2051,9 @@ simple_triggers = [
   
    (72,
    [
+       (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+   
   # Updating trade good prices according to the productions
        (call_script, "script_update_trade_good_prices"),
  # Updating player odds
@@ -1960,6 +2078,9 @@ simple_triggers = [
   #Troop AI: Merchants thinking
   (8,
    [
+       (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+	
        (try_for_parties, ":party_no"),
          (party_slot_eq, ":party_no", slot_party_type, spt_kingdom_caravan),
          (party_is_in_any_town, ":party_no"),
@@ -2041,6 +2162,9 @@ simple_triggers = [
   #Troop AI: Village farmers thinking
   (8,
    [
+       (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+	
        (try_for_parties, ":party_no"),
          (party_slot_eq, ":party_no", slot_party_type, spt_village_farmer),
          (party_is_in_any_town, ":party_no"),
@@ -2125,6 +2249,9 @@ simple_triggers = [
  #Increase castle food stores
   (2,
    [
+       (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+	   
        (try_for_range, ":center_no", castles_begin, castles_end),
          (party_slot_eq, ":center_no", slot_center_is_besieged_by, -1), #castle is not under siege
          (party_get_slot, ":center_food_store", ":center_no", slot_party_food_store),
@@ -2182,6 +2309,9 @@ simple_triggers = [
   # Make heroes running away from someone retreat to friendly centers
   (0.5,
    [
+       (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+   
        (try_for_range, ":cur_troop", heroes_begin, heroes_end),
          (troop_slot_eq, ":cur_troop", slot_troop_occupation, slto_kingdom_hero),
          (troop_get_slot, ":cur_party", ":cur_troop", slot_troop_leaded_party),
@@ -2244,6 +2374,8 @@ simple_triggers = [
   # Centers give alarm if the player is around
   (0.5,
    [
+     (neg|game_in_multiplayer_mode),
+   
      (store_current_hours, ":cur_hours"),
      (store_mod, ":cur_hours_mod", ":cur_hours", 11),
      (store_sub, ":hour_limit", ":cur_hours", 5),
@@ -2294,63 +2426,67 @@ simple_triggers = [
   # Consuming food at every 14 hours
   (14,
    [
-    # (eq, "$g_player_is_captive", 0),
-    # (party_get_num_companion_stacks, ":num_stacks","p_main_party"),
-    # (assign, ":num_men", 0),
-    # (try_for_range, ":i_stack", 0, ":num_stacks"),
-      # (party_stack_get_size, ":stack_size","p_main_party",":i_stack"),
-      # (val_add, ":num_men", ":stack_size"),
-    # (try_end),
-    # (val_div, ":num_men", 3),
-    # (try_begin),
-      # (eq, ":num_men", 0),
-      # (val_add, ":num_men", 1),
-    # (try_end),
+    (neg|game_in_multiplayer_mode),
+   
+    (eq, "$g_player_is_captive", 0),
+    (party_get_num_companion_stacks, ":num_stacks","p_main_party"),
+    (assign, ":num_men", 0),
+    (try_for_range, ":i_stack", 0, ":num_stacks"),
+      (party_stack_get_size, ":stack_size","p_main_party",":i_stack"),
+      (val_add, ":num_men", ":stack_size"),
+    (try_end),
+    (val_div, ":num_men", 3),
+    (try_begin),
+      (eq, ":num_men", 0),
+      (val_add, ":num_men", 1),
+    (try_end),
     
-    # (try_begin),
-      # (assign, ":number_of_foods_player_has", 0),
-      # (try_for_range, ":cur_edible", food_begin, food_end),      
-        # (call_script, "script_cf_player_has_item_without_modifier", ":cur_edible", imod_rotten),
-        # (val_add, ":number_of_foods_player_has", 1),
-      # (try_end),
-      # (try_begin),
-        # (ge, ":number_of_foods_player_has", 6),
-        # (unlock_achievement, ACHIEVEMENT_ABUNDANT_FEAST),        
-      # (try_end),
-    # (try_end),
+    (try_begin),
+      (assign, ":number_of_foods_player_has", 0),
+      (try_for_range, ":cur_edible", food_begin, food_end),      
+        (call_script, "script_cf_player_has_item_without_modifier", ":cur_edible", imod_rotten),
+        (val_add, ":number_of_foods_player_has", 1),
+      (try_end),
+      (try_begin),
+        (ge, ":number_of_foods_player_has", 6),
+        (unlock_achievement, ACHIEVEMENT_ABUNDANT_FEAST),        
+      (try_end),
+    (try_end),
     
-    # (assign, ":consumption_amount", ":num_men"),
-    # (assign, ":no_food_displayed", 0),
-    # (try_for_range, ":unused", 0, ":consumption_amount"),
-      # (assign, ":available_food", 0),
-      # (try_for_range, ":cur_food", food_begin, food_end),
-        # (item_set_slot, ":cur_food", slot_item_is_checked, 0),
-        # (call_script, "script_cf_player_has_item_without_modifier", ":cur_food", imod_rotten),
-        # (val_add, ":available_food", 1),
-      # (try_end),
-      # (try_begin),
-        # (gt, ":available_food", 0),
-        # (store_random_in_range, ":selected_food", 0, ":available_food"),
-        # (call_script, "script_consume_food", ":selected_food"),
-      # (else_try),
-        # (eq, ":no_food_displayed", 0),
-        # (display_message, "@Party has nothing to eat!", 0xFF0000),
-        # (call_script, "script_change_player_party_morale", -3),
-        # (assign, ":no_food_displayed", 1),
-# #NPC companion changes begin
-        # (try_begin),
-            # (call_script, "script_party_count_fit_regulars", "p_main_party"),
-            # (gt, reg0, 0),
-            # (call_script, "script_objectionable_action", tmt_egalitarian, "str_men_hungry"),
-        # (try_end),
-# #NPC companion changes end
-      # (try_end),
-    # (try_end),
+    (assign, ":consumption_amount", ":num_men"),
+    (assign, ":no_food_displayed", 0),
+    (try_for_range, ":unused", 0, ":consumption_amount"),
+      (assign, ":available_food", 0),
+      (try_for_range, ":cur_food", food_begin, food_end),
+        (item_set_slot, ":cur_food", slot_item_is_checked, 0),
+        (call_script, "script_cf_player_has_item_without_modifier", ":cur_food", imod_rotten),
+        (val_add, ":available_food", 1),
+      (try_end),
+      (try_begin),
+        (gt, ":available_food", 0),
+        (store_random_in_range, ":selected_food", 0, ":available_food"),
+        (call_script, "script_consume_food", ":selected_food"),
+      (else_try),
+        (eq, ":no_food_displayed", 0),
+        (display_message, "@Party has nothing to eat!", 0xFF0000),
+        (call_script, "script_change_player_party_morale", -3),
+        (assign, ":no_food_displayed", 1),
+#NPC companion changes begin
+        (try_begin),
+            (call_script, "script_party_count_fit_regulars", "p_main_party"),
+            (gt, reg0, 0),
+            (call_script, "script_objectionable_action", tmt_egalitarian, "str_men_hungry"),
+        (try_end),
+#NPC companion changes end
+      (try_end),
+    (try_end),
     ]),
 
   # Setting item modifiers for food
   (24,
    [
+     (neg|game_in_multiplayer_mode),
+	
      (troop_get_inventory_capacity, ":inv_size", "trp_player"),
      (try_for_range, ":i_slot", 0, ":inv_size"),
        (troop_get_inventory_slot, ":item_id", "trp_player", ":i_slot"),
@@ -2379,7 +2515,9 @@ simple_triggers = [
   
   # Updating player icon in every frame
   (0,
-   [(troop_get_inventory_slot, ":cur_horse", "trp_player", 8), #horse slot
+   [(neg|game_in_multiplayer_mode),
+   
+    (troop_get_inventory_slot, ":cur_horse", "trp_player", 8), #horse slot
     (assign, ":new_icon", -1),
     (try_begin),
       (eq, "$g_player_icon_state", pis_normal),
@@ -2404,6 +2542,8 @@ simple_triggers = [
  #Update how good a target player is for bandits
   (2,
    [
+       (neg|game_in_multiplayer_mode),
+   
        (store_troop_gold, ":total_value", "trp_player"),
        (store_div, ":bandit_attraction", ":total_value", (10000/100)), #10000 gold = excellent_target
 
@@ -2425,6 +2565,8 @@ simple_triggers = [
 	#This is a backup script to activate the player faction if it doesn't happen automatically, for whatever reason
   (3,
 	[
+	(neg|game_in_multiplayer_mode),
+	
 	(try_for_range, ":center", walled_centers_begin, walled_centers_end),
 		(faction_slot_eq, "fac_player_supporters_faction", slot_faction_state, sfs_inactive),
 		(store_faction_of_party, ":center_faction", ":center"),
@@ -2435,7 +2577,9 @@ simple_triggers = [
 	
   # Checking escape chances of prisoners that joined the party recently.
   (6,
-   [(gt, "$g_prisoner_recruit_troop_id", 0),
+   [(neg|game_in_multiplayer_mode),
+   
+    (gt, "$g_prisoner_recruit_troop_id", 0),
     (gt, "$g_prisoner_recruit_size", 0),
     (gt, "$g_prisoner_recruit_last_time", 0),
     (is_currently_night),
@@ -2469,7 +2613,9 @@ simple_triggers = [
 
   # Offering ransom fees for player's prisoner heroes
   (24,
-   [(neq, "$g_ransom_offer_rejected", 1),
+   [(neg|game_in_multiplayer_mode),
+   
+    (neq, "$g_ransom_offer_rejected", 1),
     (call_script, "script_offer_ransom_amount_to_player_for_prisoners_in_party", "p_main_party"),
     (eq, reg0, 0),#no prisoners offered
     (assign, ":end_cond", walled_centers_end),
@@ -2483,7 +2629,10 @@ simple_triggers = [
 
   # Exchanging hero prisoners between factions and clearing old ransom offers
   (72,
-   [(assign, "$g_ransom_offer_rejected", 0),
+   [(this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+	
+	(assign, "$g_ransom_offer_rejected", 0),
     (try_for_range, ":center_no", walled_centers_begin, walled_centers_end),
       (party_get_slot, ":town_lord", ":center_no", slot_town_lord),
       (gt, ":town_lord", 0),
@@ -2516,6 +2665,9 @@ simple_triggers = [
   # Adding mercenary troops to the towns
   (72,
    [
+     (this_or_next|multiplayer_is_server),
+     (neg|game_in_multiplayer_mode),
+	 
      (call_script, "script_update_mercenary_units_of_towns"),
      #NPC changes begin
      # removes   (call_script, "script_update_companion_candidates_in_taverns"),
@@ -2532,13 +2684,19 @@ simple_triggers = [
     ]),
 
   (24,
-   [	
+   [
+    (this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+	
     (call_script, "script_update_other_taverngoers"),
 	]),
 	
   # Setting random walker types
   (36,
-   [(try_for_range, ":center_no", centers_begin, centers_end),
+   [(this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+	
+	(try_for_range, ":center_no", centers_begin, centers_end),
       (this_or_next|party_slot_eq, ":center_no", slot_party_type, spt_town),
       (             party_slot_eq, ":center_no", slot_party_type, spt_village),
       (call_script, "script_center_remove_walker_type_from_walkers", ":center_no", walkert_needs_money),
@@ -2555,7 +2713,10 @@ simple_triggers = [
 
   # Checking center upgrades
   (12,
-   [(try_for_range, ":center_no", centers_begin, centers_end),
+   [(this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+	
+	(try_for_range, ":center_no", centers_begin, centers_end),
       (party_get_slot, ":cur_improvement", ":center_no", slot_center_current_improvement),
       (gt, ":cur_improvement", 0),
       (party_get_slot, ":cur_improvement_end_time", ":center_no", slot_center_improvement_end_hour),
@@ -2580,7 +2741,10 @@ simple_triggers = [
   # Adding tournaments to towns
   # Adding bandits to towns and villages
   (24,
-   [(assign, ":num_active_tournaments", 0),
+   [(this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+	
+	(assign, ":num_active_tournaments", 0),
     (try_for_range, ":center_no", towns_begin, towns_end),
       (party_get_slot, ":has_tournament", ":center_no", slot_town_has_tournament),
       (try_begin),
@@ -2750,7 +2914,9 @@ simple_triggers = [
   
   # Taking denars from player while resting in not owned centers
   (1,
-   [(neg|map_free),
+   [(neg|game_in_multiplayer_mode),
+   
+    (neg|map_free),
     (is_currently_night),
 #    (ge, "$g_last_rest_center", 0),
     (is_between, "$g_last_rest_center", centers_begin, centers_end),
@@ -2777,18 +2943,27 @@ simple_triggers = [
   # Spawn some bandits.
   (36,
    [
+       (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+	   
        (call_script, "script_spawn_bandits"),
     ]),
 
   # Make parties larger as game progresses.
   (24,
    [
+       (this_or_next|multiplayer_is_server),
+       (neg|game_in_multiplayer_mode),
+	   
        (call_script, "script_update_party_creation_random_limits"),
     ]),
   
   # Check if a faction is defeated every day
   (24,
    [
+    (this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+	
     (assign, ":num_active_factions", 0),
     (try_for_range, ":cur_kingdom", kingdoms_begin, kingdoms_end),
       (faction_set_slot, ":cur_kingdom", slot_faction_number_of_parties, 0),
@@ -2873,6 +3048,8 @@ simple_triggers = [
 
   (3, #check to see if player's court has been captured
    [
+     (neg|game_in_multiplayer_mode),
+	 
      (try_begin), #The old court has been lost
        (is_between, "$g_player_court", centers_begin, centers_end),
        (store_faction_of_party, ":court_faction", "$g_player_court"),
@@ -2945,6 +3122,8 @@ simple_triggers = [
   # Reduce renown slightly by 0.5% every week
   (7 * 24,
    [
+       (neg|game_in_multiplayer_mode),
+	   
        (troop_get_slot, ":player_renown", "trp_player", slot_troop_renown),
        (store_div, ":renown_decrease", ":player_renown", 200),
        (val_sub, ":player_renown", ":renown_decrease"),
@@ -2952,7 +3131,9 @@ simple_triggers = [
     ]),
 
   # Read books if player is resting.
-  (1, [(neg|map_free),
+  (1, [(neg|game_in_multiplayer_mode),
+  
+       (neg|map_free),
        (gt, "$g_player_reading_book", 0),
        (player_has_item, "$g_player_reading_book"),
        (store_attribute_level, ":int", "trp_player", ca_intelligence),
@@ -3008,7 +3189,9 @@ simple_triggers = [
        ]),
 
 # Removing cattle herds if they are way out of range
-  (12, [(try_for_parties, ":cur_party"),
+  (12, [(neg|game_in_multiplayer_mode),
+  
+        (try_for_parties, ":cur_party"),
           (party_slot_eq, ":cur_party", slot_party_type, spt_cattle_herd),
           (store_distance_to_party_from_party, ":dist",":cur_party", "p_main_party"),
           (try_begin),
@@ -3036,7 +3219,9 @@ simple_triggers = [
 
 # School
   (30 * 24,
-   [(try_for_range, ":cur_village", villages_begin, villages_end),
+   [(neg|game_in_multiplayer_mode),
+   
+    (try_for_range, ":cur_village", villages_begin, villages_end),
       (party_slot_eq, ":cur_village", slot_town_lord, "trp_player"),
       (party_slot_eq, ":cur_village", slot_center_has_school, 1),
       (party_get_slot, ":cur_relation", ":cur_village", slot_center_player_relation),
@@ -3049,7 +3234,9 @@ simple_triggers = [
 # Quest triggers:
 
 # Remaining days text update
-  (24, [(try_for_range, ":cur_quest", all_quests_begin, all_quests_end),
+  (24, [(neg|game_in_multiplayer_mode),
+  
+        (try_for_range, ":cur_quest", all_quests_begin, all_quests_end),
           (try_begin),
             (check_quest_active, ":cur_quest"),
             (try_begin),
@@ -3078,6 +3265,8 @@ simple_triggers = [
 # Report to army quest 
   (2,
    [
+     (neg|game_in_multiplayer_mode),
+	 
      (eq, "$g_infinite_camping", 0),
      (is_between, "$players_kingdom", kingdoms_begin, kingdoms_end),
      (eq, "$g_player_is_captive", 0),
@@ -3176,6 +3365,8 @@ simple_triggers = [
 # Army quest initializer
   (3,
    [
+     (neg|game_in_multiplayer_mode),
+	 
      (assign, "$g_random_army_quest", -1),
      (check_quest_active, "qst_follow_army", 1),
      (is_between, "$players_kingdom", kingdoms_begin, kingdoms_end),
@@ -3316,7 +3507,9 @@ simple_triggers = [
     ]),
 
 # Move cattle herd
-  (0.5, [(check_quest_active,"qst_move_cattle_herd"),
+  (0.5, [(neg|game_in_multiplayer_mode),
+  
+         (check_quest_active,"qst_move_cattle_herd"),
          (neg|check_quest_concluded,"qst_move_cattle_herd"),
          (quest_get_slot, ":target_party", "qst_move_cattle_herd", slot_quest_target_party),
          (quest_get_slot, ":target_center", "qst_move_cattle_herd", slot_quest_target_center),
@@ -3327,7 +3520,9 @@ simple_triggers = [
     ]),
 
   (2, [
-       (try_for_range, ":troop_no", active_npcs_begin, active_npcs_end),
+       (neg|game_in_multiplayer_mode),
+	   
+	   (try_for_range, ":troop_no", active_npcs_begin, active_npcs_end),
 		 (troop_slot_eq, ":troop_no", slot_troop_occupation, slto_kingdom_hero),
 		 (troop_get_slot, ":party_no", ":troop_no", slot_troop_leaded_party),
          (ge, ":party_no", 1),
@@ -3346,6 +3541,8 @@ simple_triggers = [
 # Deliver cattle and deliver cattle to army
   (0.5,
    [
+     (neg|game_in_multiplayer_mode),
+	 
      (try_begin),
        (check_quest_active,"qst_deliver_cattle"),
        (neg|check_quest_succeeded, "qst_deliver_cattle"),
@@ -3385,6 +3582,8 @@ simple_triggers = [
 # Train peasants against bandits
   (1,
    [
+     (neg|game_in_multiplayer_mode),
+	 
      (neg|map_free),
      (check_quest_active, "qst_train_peasants_against_bandits"),
      (neg|check_quest_concluded, "qst_train_peasants_against_bandits"),
@@ -3404,6 +3603,8 @@ simple_triggers = [
 # Scout waypoints
   (1,
    [
+     (neg|game_in_multiplayer_mode),
+	 
      (check_quest_active,"qst_scout_waypoints"),
      (neg|check_quest_succeeded, "qst_scout_waypoints"),
      (try_begin),
@@ -3438,7 +3639,9 @@ simple_triggers = [
   
 # Kill local merchant
   
-  (3, [(neg|map_free),
+  (3, [(neg|game_in_multiplayer_mode),
+  
+       (neg|map_free),
        (check_quest_active, "qst_kill_local_merchant"),
        (quest_slot_eq, "qst_kill_local_merchant", slot_quest_current_state, 0),
        (quest_set_slot, "qst_kill_local_merchant", slot_quest_current_state, 1),
@@ -3448,7 +3651,9 @@ simple_triggers = [
        ]),
 
 # Collect taxes
-  (1, [(neg|map_free),
+  (1, [(neg|game_in_multiplayer_mode),
+  
+       (neg|map_free),
        (check_quest_active, "qst_collect_taxes"),
        (eq, "$g_player_is_captive", 0),
        (eq, "$qst_collect_taxes_currently_collecting", 1),
@@ -3511,7 +3716,10 @@ simple_triggers = [
        ]),
 
 #persuade_lords_to_make_peace begin
-  (72, [(gt, "$g_force_peace_faction_1", 0),
+  (72, [(this_or_next|multiplayer_is_server),
+        (neg|game_in_multiplayer_mode),
+	
+	    (gt, "$g_force_peace_faction_1", 0),
         (gt, "$g_force_peace_faction_2", 0),
         (try_begin),
           (store_relation, ":relation", "$g_force_peace_faction_1", "$g_force_peace_faction_2"),
@@ -3526,6 +3734,8 @@ simple_triggers = [
 #Resolve one issue each hour
 (1, 
    [           
+		(neg|game_in_multiplayer_mode),
+		
 		(str_store_string, s51, "str_no_trigger_noted"),
 		
 		# Rejoining party
@@ -3657,7 +3867,10 @@ simple_triggers = [
 #NPC changes end
 
 (4, 
-   [(try_for_range, ":troop_no", active_npcs_begin, active_npcs_end),
+   [(this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+	
+	(try_for_range, ":troop_no", active_npcs_begin, active_npcs_end),
       (troop_slot_ge, ":troop_no", slot_troop_change_to_faction, 1),
       (store_troop_faction, ":faction_no", ":troop_no"),
       (troop_get_slot, ":new_faction_no", ":troop_no", slot_troop_change_to_faction),
@@ -3725,6 +3938,9 @@ simple_triggers = [
 
 (1,
    [
+     (this_or_next|multiplayer_is_server),
+     (neg|game_in_multiplayer_mode),
+   
      (eq, "$cheat_mode", 1),
      (try_for_range, ":center_no", centers_begin, centers_end),
        (party_get_battle_opponent, ":besieger_party", ":center_no"),
@@ -3739,7 +3955,9 @@ simple_triggers = [
 
 (1, 
    [
-     (store_current_day, ":cur_day"),
+     (neg|game_in_multiplayer_mode),
+	 
+	 (store_current_day, ":cur_day"),
      (gt, ":cur_day", "$g_last_report_control_day"),
      (store_time_of_day, ":cur_hour"),
      (ge, ":cur_hour", 18),
@@ -3871,7 +4089,10 @@ simple_triggers = [
   
   (1,
    [
-     (call_script, "script_calculate_castle_prosperities_by_using_its_villages"),
+     (this_or_next|multiplayer_is_server),
+     (neg|game_in_multiplayer_mode),
+	
+	 (call_script, "script_calculate_castle_prosperities_by_using_its_villages"),
 
      (store_add, ":fac_kingdom_6_plus_one", "fac_kingdom_6", 1),
 
@@ -3890,6 +4111,8 @@ simple_triggers = [
   (1,
    [   
      (try_begin),
+	   (neg|game_in_multiplayer_mode),
+	   
        (eq, "$g_player_is_captive", 1),
        (neg|party_is_active, "$capturer_party"),
        (rest_for_hours, 0, 0, 0),
@@ -3966,6 +4189,8 @@ simple_triggers = [
    
    
    #The following scripts are to end quests which should have cancelled, but did not because of a bug
+   (neg|game_in_multiplayer_mode),
+   
    (try_begin),
 	(check_quest_active, "qst_formal_marriage_proposal"),
 	(check_quest_failed, "qst_formal_marriage_proposal"),
@@ -4053,14 +4278,14 @@ simple_triggers = [
    
 	(ti_server_player_joined,
 	[
-		(store_trigger_param_1, ":player_no"),
+		#(store_trigger_param_1, ":player_no"),
 		
 	]),
 	
 
 	(ti_on_player_exit,
 	[
-		(store_trigger_param_1, ":player_no"),
+		#(store_trigger_param_1, ":player_no"),
 		
 	]),	
 	 

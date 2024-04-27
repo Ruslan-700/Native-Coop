@@ -30,29 +30,41 @@ num_merchandise_goods = 36
 
 triggers = [
 # Tutorial:
-  (0.1, 0, ti_once, [(map_free,0)], [(dialog_box,"str_tutorial_map1")]),
+  (0.1, 0, ti_once, [(neg|game_in_multiplayer_mode),(map_free,0)], [(dialog_box,"str_tutorial_map1")]),
 
 # Refresh Merchants
   (0.0, 0, 168.0, [],
-  [    
+  [
+    (this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+	
     (call_script, "script_refresh_center_inventories"),
   ]),
 
 # Refresh Armor sellers
   (0.0, 0, 168.0, [],
-  [    
+  [
+    (this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+	
     (call_script, "script_refresh_center_armories"),
   ]),
 
 # Refresh Weapon sellers
   (0.0, 0, 168.0, [],
   [
+    (this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+	  
     (call_script, "script_refresh_center_weaponsmiths"),
   ]),
 
 # Refresh Horse sellers
   (0.0, 0, 168.0, [],
   [
+    (this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+	  
     (call_script, "script_refresh_center_stables"),
   ]),
   
@@ -74,6 +86,9 @@ triggers = [
 
   (5.7, 0, 0.0, 
   [
+    (this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+	  
     (store_num_parties_of_template, reg2, "pt_manhunters"),    
     (lt, reg2, 4)
   ],
@@ -87,6 +102,8 @@ triggers = [
 
 
   (1.0, 0.0, 0.0, [
+  (neg|game_in_multiplayer_mode),
+  
   (check_quest_active, "qst_track_down_bandits"),
   (neg|check_quest_failed, "qst_track_down_bandits"),
   (neg|check_quest_succeeded, "qst_track_down_bandits"),
@@ -163,7 +180,10 @@ triggers = [
 #                         (party_set_ai_object,"$pout_party","$pout_town"),
 #                    ]),
 
-  (2.0, 0, 0, [(store_random_party_of_template, reg(2), "pt_prisoner_train_party"),
+  (2.0, 0, 0, [(this_or_next|multiplayer_is_server),
+               (neg|game_in_multiplayer_mode),
+	
+               (store_random_party_of_template, reg(2), "pt_prisoner_train_party"),
                (party_is_in_any_town,reg(2)),
                ],
               [(store_faction_of_party, ":faction_no", reg(2)),
@@ -206,6 +226,8 @@ triggers = [
   
   (4.0, 0, 0.0,
    [
+     (neg|game_in_multiplayer_mode),
+	 
      (eq, "$caravan_escort_state", 1), #cancel caravan_escort_state if caravan leaves the destination
      (assign, ":continue", 0),
      (try_begin),
@@ -241,7 +263,10 @@ triggers = [
 #    (party_set_ai_object,"$pout_party","$pout_town"),
 #    ]),
 
-  (1.5, 0, 0, [(store_random_party_of_template, reg(2), "pt_messenger_party"),
+  (1.5, 0, 0, [(this_or_next|multiplayer_is_server),
+               (neg|game_in_multiplayer_mode),
+	
+               (store_random_party_of_template, reg(2), "pt_messenger_party"),
                (party_is_in_any_town,reg(2)),
                ],
    [(store_faction_of_party, ":faction_no", reg(2)),
@@ -273,7 +298,10 @@ triggers = [
 
 #Kingdom Parties
   (1.0, 0, 0.0, [],
-   [(try_for_range, ":cur_kingdom", kingdoms_begin, kingdoms_end),
+   [(this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+   
+    (try_for_range, ":cur_kingdom", kingdoms_begin, kingdoms_end),
       (faction_slot_eq, ":cur_kingdom", slot_faction_state, sfs_active),
 ##      (neq, ":cur_kingdom", "fac_player_supporters_faction"),
 ##      (try_begin),
@@ -468,6 +496,8 @@ triggers = [
 # Incriminate Loyal Advisor quest
   (0.2, 0.0, 0.0,
    [
+       (neg|game_in_multiplayer_mode),
+   
        (check_quest_active, "qst_incriminate_loyal_commander"),
        (neg|check_quest_concluded, "qst_incriminate_loyal_commander"),
        (quest_slot_eq, "qst_incriminate_loyal_commander", slot_quest_current_state, 2),
@@ -517,6 +547,8 @@ triggers = [
 # Runaway Peasants quest
   (0.2, 0.0, 0.0,
    [
+       (neg|game_in_multiplayer_mode),
+	   
        (check_quest_active, "qst_bring_back_runaway_serfs"),
        (neg|check_quest_concluded, "qst_bring_back_runaway_serfs"),
        (quest_get_slot, ":quest_object_center", "qst_bring_back_runaway_serfs", slot_quest_object_center),
@@ -1021,6 +1053,8 @@ triggers = [
 # Follow Spy quest
   (0.5, 0.0, 0.0,
    [
+       (neg|game_in_multiplayer_mode),
+	   
        (check_quest_active, "qst_follow_spy"),
        (eq, "$qst_follow_spy_no_active_parties", 0),
        (quest_get_slot, ":quest_giver_center", "qst_follow_spy", slot_quest_giver_center),
@@ -1184,14 +1218,16 @@ triggers = [
 ####################################  
  # Apply interest to merchants guild debt  1% per week
   (24.0 * 7, 0.0, 0.0,
-   [],
+   [(neg|game_in_multiplayer_mode),],
    [
        (val_mul,"$debt_to_merchants_guild",101),
        (val_div,"$debt_to_merchants_guild",100)
     ]
    ),
 # Escort merchant caravan:
-  (0.1, 0.0, 0.1, [(check_quest_active, "qst_escort_merchant_caravan"),
+  (0.1, 0.0, 0.1, [(neg|game_in_multiplayer_mode),
+				   
+                   (check_quest_active, "qst_escort_merchant_caravan"),
                    (eq, "$escort_merchant_caravan_mode", 1)
                    ],
                   [(quest_get_slot, ":quest_target_party", "qst_escort_merchant_caravan", slot_quest_target_party),
@@ -1201,7 +1237,9 @@ triggers = [
                      (party_set_flags, ":quest_target_party", pf_default_behavior, 0),
                    (try_end),
                    ]),
-  (0.1, 0.0, 0.1, [(check_quest_active, "qst_escort_merchant_caravan"),
+  (0.1, 0.0, 0.1, [(neg|game_in_multiplayer_mode),
+  
+                    (check_quest_active, "qst_escort_merchant_caravan"),
                     (eq, "$escort_merchant_caravan_mode", 0),
                     ],
                    [(quest_get_slot, ":quest_target_party", "qst_escort_merchant_caravan", slot_quest_target_party),
@@ -1213,7 +1251,9 @@ triggers = [
                     (try_end),
                     ]),
 
-  (0.1, 0, 0.0, [(check_quest_active, "qst_escort_merchant_caravan"),
+  (0.1, 0, 0.0, [(neg|game_in_multiplayer_mode),
+  
+                 (check_quest_active, "qst_escort_merchant_caravan"),
                  (quest_get_slot, ":quest_target_party", "qst_escort_merchant_caravan", slot_quest_target_party),
                  (neg|party_is_active,":quest_target_party"),
                  ],
@@ -1221,7 +1261,9 @@ triggers = [
                  ]),
 
 # Troublesome bandits
-  (0.3, 0.0, 1.1, [(check_quest_active, "qst_troublesome_bandits"),
+  (0.3, 0.0, 1.1, [(neg|game_in_multiplayer_mode),
+  
+                   (check_quest_active, "qst_troublesome_bandits"),
                    (neg|check_quest_failed, "qst_troublesome_bandits"),
                    (store_num_parties_destroyed, ":cur_eliminated", "pt_troublesome_bandits"),
                    (lt, "$qst_troublesome_bandits_eliminated", ":cur_eliminated"),
@@ -1232,7 +1274,9 @@ triggers = [
                    (call_script, "script_abort_quest", "qst_troublesome_bandits", 0),
                    ]),
 
-  (0.3, 0.0, 1.1, [(check_quest_active, "qst_troublesome_bandits"),
+  (0.3, 0.0, 1.1, [(neg|game_in_multiplayer_mode),
+  
+                   (check_quest_active, "qst_troublesome_bandits"),
                    (neg|check_quest_succeeded, "qst_troublesome_bandits"),
                    (store_num_parties_destroyed, ":cur_eliminated", "pt_troublesome_bandits"),
                    (lt, "$qst_troublesome_bandits_eliminated", ":cur_eliminated"),
@@ -1243,7 +1287,9 @@ triggers = [
 				  
 # Kidnapped girl:
    (1, 0, 0,
-   [(check_quest_active, "qst_kidnapped_girl"),
+   [(neg|game_in_multiplayer_mode),
+   
+    (check_quest_active, "qst_kidnapped_girl"),
     (quest_get_slot, ":quest_target_party", "qst_kidnapped_girl", slot_quest_target_party),
     (party_is_active, ":quest_target_party"),
     (party_is_in_any_town, ":quest_target_party"),
@@ -1258,6 +1304,9 @@ triggers = [
 
   (0, 0, 24 * 14,
    [
+        (this_or_next|multiplayer_is_server),
+        (neg|game_in_multiplayer_mode),
+	
         (try_for_range, ":pretender", pretenders_begin, pretenders_end),
           (troop_set_slot, ":pretender", slot_troop_cur_center, 0),
           (neq, ":pretender", "$supported_pretender"),
@@ -1304,6 +1353,9 @@ triggers = [
 #Move unemployed NPCs around taverns
    (24 * 15 , 0, 0, 
    [
+    (this_or_next|multiplayer_is_server),
+    (neg|game_in_multiplayer_mode),
+		
     (call_script, "script_update_companion_candidates_in_taverns"),
     ],
    []
@@ -1311,7 +1363,7 @@ triggers = [
 
 #Process morale and determine personality clashes
   (0, 0, 24,
-   [],
+   [(neg|game_in_multiplayer_mode),],
 [
 
 #Count NPCs in party and get the "grievance divisor", which determines how fast grievances go away
@@ -1499,6 +1551,8 @@ triggers = [
 # Lady of the lake achievement
    (1, 0, 0,
    [
+     (neg|game_in_multiplayer_mode),
+	 
      (troop_get_type, ":is_female", "trp_player"),
      (eq, ":is_female", 1),       
      (try_for_range, ":companion", companions_begin, companions_end),
