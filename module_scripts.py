@@ -30,6 +30,11 @@ scripts = [
   # INPUT: none
   ("game_start",
    [
+      (try_begin),
+	    (multiplayer_is_campaign),
+	    (disable_party, "p_main_party"),
+	  (try_end),
+	  
       (faction_set_slot, "fac_player_supporters_faction", slot_faction_state, sfs_inactive),
       (assign, "$g_player_luck", 200),
       (assign, "$g_player_luck", 200),
@@ -711,6 +716,9 @@ scripts = [
         (party_set_slot, ":center_no", slot_party_food_store, ":food_store_limit"),
 
         #create lord parties
+		(this_or_next|multiplayer_is_server),
+        (neg|game_in_multiplayer_mode),
+		
         (party_get_slot, ":center_lord", ":center_no", slot_town_lord),
         (ge, ":center_lord", 1),
         (troop_slot_eq, ":center_lord", slot_troop_leaded_party, 0),
@@ -787,28 +795,33 @@ scripts = [
 	    (display_message, "@{!}DEBUG : Assigned love interests. Attraction seed: {reg3}"),
 	  (try_end),
 	  
-	  #we need to spawn more bandits in warband, because map is bigger.
-      #(try_for_range, ":unused", 0, 7),
-      #  (call_script, "script_spawn_bandits"),
-      #(try_end),
+	  (try_begin),
+		  (this_or_next|multiplayer_is_server),
+		  (neg|game_in_multiplayer_mode),
+		  
+		  #we need to spawn more bandits in warband, because map is bigger.
+		  #(try_for_range, ":unused", 0, 7),
+		  #  (call_script, "script_spawn_bandits"),
+		  #(try_end),
 
-      #(set_spawn_radius, 50),
-      #(try_for_range, ":unused", 0, 25),
-      #  (spawn_around_party, "p_main_party", "pt_looters"),
-      #(try_end),
-	  	  
-      (try_for_range, ":unused", 0, 10),
-        (call_script, "script_spawn_bandits"),
+		  #(set_spawn_radius, 50),
+		  #(try_for_range, ":unused", 0, 25),
+		  #  (spawn_around_party, "p_main_party", "pt_looters"),
+		  #(try_end),
+			  
+		  (try_for_range, ":unused", 0, 10),
+			(call_script, "script_spawn_bandits"),
+		  (try_end),
+
+		  #we are adding looter parties around each village with 1/5 probability.
+		  (set_spawn_radius, 5),
+		  (try_for_range, ":cur_village", villages_begin, villages_end),
+			(store_random_in_range, ":random_value", 0, 5),               
+			(eq, ":random_value", 0),
+			(spawn_around_party, ":cur_village", "pt_looters"),
+		  (try_end),
       (try_end),
-
-      #we are adding looter parties around each village with 1/5 probability.
-      (set_spawn_radius, 5),
-      (try_for_range, ":cur_village", villages_begin, villages_end),
-        (store_random_in_range, ":random_value", 0, 5),               
-        (eq, ":random_value", 0),
-        (spawn_around_party, ":cur_village", "pt_looters"),
-      (try_end),
-
+	  
       (call_script, "script_update_mercenary_units_of_towns"),
       (call_script, "script_update_companion_candidates_in_taverns"),
       (call_script, "script_update_ransom_brokers"),

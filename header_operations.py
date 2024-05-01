@@ -3359,6 +3359,7 @@ multiplayer_cur_message_get_position         = 3412 #(multiplayer_cur_message_ge
 multiplayer_cur_message_get_coordinate       = 3413 #(multiplayer_cur_message_get_coordinate, <position_register>, [<local>]), #Stores x, y, z coordinates from the current message register into <position_register>. [<local>] MUST match the type sent (requires, for WSE: network_compatible = 0 in wse_settings.ini, for WSE2: bBreakWarbandCompatibility=true in rgl_config.ini)
 multiplayer_cur_profile_get_skin             = 3414 #(multiplayer_cur_profile_get_skin, <destination>), #Stores current profile's skin into <destination>
 multiplayer_connect_to_server                = 3415 #(multiplayer_connect_to_server, <address>, <password>), #Connect to server with <address> and <password> (requires WSE2)
+multiplayer_is_campaign                      = 3416 #(multiplayer_is_campaign), #Checks that the code is running in multiplayer campaign mode.
 
 server_set_password_admin      = 3500 #(server_set_password_admin, <password>), #Sets <password> as server administrator password
 server_set_password_private    = 3501 #(server_set_password_private, <password>), #Sets <password> as server private player password
@@ -3807,6 +3808,7 @@ can_fail_operations += [
 	array_le,
 	lua_call,
 	lua_triggerCallback,
+	multiplayer_is_campaign,
 ]
 
 depth_operations = [try_begin, try_for_range, try_for_range_backwards, try_for_parties, try_for_agents, try_for_prop_instances, try_for_players, try_for_dict_keys,]
