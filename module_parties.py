@@ -42,37 +42,37 @@ pf_village = pf_is_static|pf_always_visible|pf_hide_defenders|pf_label_small
 
 
 parties = [
-  ("main_party","Main Party",icon_player|pf_limit_members, no_menu, pt_none,fac_player_faction,0,ai_bhvr_hold,0,(17, 52.5),[(trp_player,1,0)]),
-  ("temp_party","{!}temp_party",pf_disabled, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0,0),[]),
-  ("camp_bandits","{!}camp_bandits",pf_disabled, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(1,1),[(trp_temp_troop,3,0)]),
+  ("main_party","Main Party",icon_player|pf_limit_members|pf_dont_send_to_clients, no_menu, pt_none,fac_player_faction,0,ai_bhvr_hold,0,(17, 52.5),[(trp_player,1,0)]),
+  ("temp_party","{!}temp_party",pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0,0),[]),
+  ("camp_bandits","{!}camp_bandits",pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(1,1),[(trp_temp_troop,3,0)]),
 #parties before this point are hardwired. Their order should not be changed.
 
     ] + [ ("player_party_%04d"%(player_index),"Player Party",icon_player|pf_limit_members|pf_disabled, no_menu, pt_none,fac_player_faction,0,ai_bhvr_hold,0,(17, 52.5),[(trp_player_0000+player_index,1,0)]) for player_index in range(0, players_number) ] + [
 
-  ("temp_party_2","{!}temp_party_2",pf_disabled, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0,0),[]),
+  ("temp_party_2","{!}temp_party_2",pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0,0),[]),
 #Used for calculating casulties.
-  ("temp_casualties","{!}casualties",pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
-  ("temp_casualties_2","{!}casualties",pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
-  ("temp_casualties_3","{!}casualties",pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
-  ("temp_wounded","{!}enemies_wounded",pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
-  ("temp_killed", "{!}enemies_killed", pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
-  ("main_party_backup","{!}_",  pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
-  ("encountered_party_backup","{!}_",  pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
-#  ("ally_party_backup","_",  pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
-  ("collective_friends_backup","{!}_",  pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
-  ("player_casualties","{!}_",  pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
-  ("enemy_casualties","{!}_",  pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
-  ("ally_casualties","{!}_",  pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+  ("temp_casualties","{!}casualties",pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+  ("temp_casualties_2","{!}casualties",pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+  ("temp_casualties_3","{!}casualties",pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+  ("temp_wounded","{!}enemies_wounded",pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+  ("temp_killed", "{!}enemies_killed", pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+  ("main_party_backup","{!}_",  pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+  ("encountered_party_backup","{!}_",  pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+#  ("ally_party_backup","_",  pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+  ("collective_friends_backup","{!}_",  pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+  ("player_casualties","{!}_",  pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+  ("enemy_casualties","{!}_",  pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+  ("ally_casualties","{!}_",  pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
 
-  ("collective_enemy","{!}collective_enemy",pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+  ("collective_enemy","{!}collective_enemy",pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
   #TODO: remove this and move all to collective ally
-  ("collective_ally","{!}collective_ally",pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
-  ("collective_friends","{!}collective_ally",pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+  ("collective_ally","{!}collective_ally",pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+  ("collective_friends","{!}collective_ally",pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
    
-  ("total_enemy_casualties","{!}_",  pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]), #ganimet hesaplari icin #new:
-  ("routed_enemies","{!}routed_enemies",pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]), #new:  
+  ("total_enemy_casualties","{!}_",  pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]), #ganimet hesaplari icin #new:
+  ("routed_enemies","{!}routed_enemies",pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]), #new:  
 
-#  ("village_reinforcements","village_reinforcements",pf_is_static|pf_disabled, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
+#  ("village_reinforcements","village_reinforcements",pf_is_static|pf_disabled|pf_dont_send_to_clients, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(1,1),[]),
 
 ###############################################################  
   ("zendar","Zendar",pf_disabled|icon_town|pf_is_static|pf_always_visible|pf_hide_defenders, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(18,60),[]),
@@ -314,20 +314,20 @@ parties = [
   ("Bridge_13","{!}13",icon_bridge_a|pf_is_static|pf_always_visible|pf_no_label, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(-84.02, -7),[], -17.7),
   ("Bridge_14","{!}14",icon_bridge_a|pf_is_static|pf_always_visible|pf_no_label, no_menu, pt_none, fac_neutral,0,ai_bhvr_hold,0,(-23.36, 75.8),[], 66.6),
 
-  ("looter_spawn_point"   ,"{!}looter_sp",pf_disabled|pf_is_static, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(26, 77),[(trp_looter,15,0)]),
-  ("steppe_bandit_spawn_point"  ,"the steppes",pf_disabled|pf_is_static, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(125, 9),[(trp_looter,15,0)]),
-  ("taiga_bandit_spawn_point"   ,"the tundra",pf_disabled|pf_is_static, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(78, 84),[(trp_looter,15,0)]),
-##  ("black_khergit_spawn_point"  ,"black_khergit_sp",pf_disabled|pf_is_static, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(47.1, -73.3),[(trp_looter,15,0)]),
-  ("forest_bandit_spawn_point"  ,"the forests",pf_disabled|pf_is_static, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(-35, 18),[(trp_looter,15,0)]),
-  ("mountain_bandit_spawn_point","the highlands",pf_disabled|pf_is_static, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(-90, -26.8),[(trp_looter,15,0)]),
-  ("sea_raider_spawn_point_1"   ,"the coast",pf_disabled|pf_is_static, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(48.5, 110),[(trp_looter,15,0)]),
-  ("sea_raider_spawn_point_2"   ,"the coast",pf_disabled|pf_is_static, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(-42, 76.7),[(trp_looter,15,0)]),
-  ("desert_bandit_spawn_point"  ,"the deserts",pf_disabled|pf_is_static, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(110, -100),[(trp_looter,15,0)]),
+  ("looter_spawn_point"   ,"{!}looter_sp",pf_disabled|pf_is_static|pf_dont_send_to_clients, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(26, 77),[(trp_looter,15,0)]),
+  ("steppe_bandit_spawn_point"  ,"the steppes",pf_disabled|pf_is_static|pf_dont_send_to_clients, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(125, 9),[(trp_looter,15,0)]),
+  ("taiga_bandit_spawn_point"   ,"the tundra",pf_disabled|pf_is_static|pf_dont_send_to_clients, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(78, 84),[(trp_looter,15,0)]),
+##  ("black_khergit_spawn_point"  ,"black_khergit_sp",pf_disabled|pf_is_static|pf_dont_send_to_clients, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(47.1, -73.3),[(trp_looter,15,0)]),
+  ("forest_bandit_spawn_point"  ,"the forests",pf_disabled|pf_is_static|pf_dont_send_to_clients, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(-35, 18),[(trp_looter,15,0)]),
+  ("mountain_bandit_spawn_point","the highlands",pf_disabled|pf_is_static|pf_dont_send_to_clients, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(-90, -26.8),[(trp_looter,15,0)]),
+  ("sea_raider_spawn_point_1"   ,"the coast",pf_disabled|pf_is_static|pf_dont_send_to_clients, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(48.5, 110),[(trp_looter,15,0)]),
+  ("sea_raider_spawn_point_2"   ,"the coast",pf_disabled|pf_is_static|pf_dont_send_to_clients, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(-42, 76.7),[(trp_looter,15,0)]),
+  ("desert_bandit_spawn_point"  ,"the deserts",pf_disabled|pf_is_static|pf_dont_send_to_clients, no_menu, pt_none, fac_outlaws,0,ai_bhvr_hold,0,(110, -100),[(trp_looter,15,0)]),
  # add extra towns before this point 
-  ("spawn_points_end"                  ,"{!}last_spawn_point",    pf_disabled|pf_is_static, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0., 0),[(trp_looter,15,0)]),
-  ("reserved_1"                  ,"{!}last_spawn_point",    pf_disabled|pf_is_static, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0., 0),[(trp_looter,15,0)]),
-  ("reserved_2"                  ,"{!}last_spawn_point",    pf_disabled|pf_is_static, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0., 0),[(trp_looter,15,0)]),
-  ("reserved_3"                  ,"{!}last_spawn_point",    pf_disabled|pf_is_static, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0., 0),[(trp_looter,15,0)]),
-  ("reserved_4"                  ,"{!}last_spawn_point",    pf_disabled|pf_is_static, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0., 0),[(trp_looter,15,0)]),
-  ("reserved_5"                  ,"{!}last_spawn_point",    pf_disabled|pf_is_static, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0., 0),[(trp_looter,15,0)]),
+  ("spawn_points_end"                  ,"{!}last_spawn_point",    pf_disabled|pf_is_static|pf_dont_send_to_clients, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0., 0),[(trp_looter,15,0)]),
+  ("reserved_1"                  ,"{!}last_spawn_point",    pf_disabled|pf_is_static|pf_dont_send_to_clients, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0., 0),[(trp_looter,15,0)]),
+  ("reserved_2"                  ,"{!}last_spawn_point",    pf_disabled|pf_is_static|pf_dont_send_to_clients, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0., 0),[(trp_looter,15,0)]),
+  ("reserved_3"                  ,"{!}last_spawn_point",    pf_disabled|pf_is_static|pf_dont_send_to_clients, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0., 0),[(trp_looter,15,0)]),
+  ("reserved_4"                  ,"{!}last_spawn_point",    pf_disabled|pf_is_static|pf_dont_send_to_clients, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0., 0),[(trp_looter,15,0)]),
+  ("reserved_5"                  ,"{!}last_spawn_point",    pf_disabled|pf_is_static|pf_dont_send_to_clients, no_menu, pt_none, fac_commoners,0,ai_bhvr_hold,0,(0., 0),[(trp_looter,15,0)]),
   ]
