@@ -4278,10 +4278,9 @@ simple_triggers = [
    
 	(ti_server_player_joined,
 	[
-		#(store_trigger_param_1, ":player_no"),
-		
+		(store_trigger_param_1, ":player_no"),
+		(call_script, "script_multiplayer_campaign_send_initial_information", ":player_no"),
 	]),
-	
 
 	(ti_on_player_exit,
 	[

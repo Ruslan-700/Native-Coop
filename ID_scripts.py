@@ -608,15 +608,17 @@ script_coop_drop_item = 606
 script_cf_coop_give_item_to_assigned_group_member = 607
 script_add_player_to_cur_tableau_for_coop = 608
 script_add_troop_to_cur_tableau_for_coop = 609
-script_wse_multiplayer_message_received = 610
-script_wse_game_saved = 611
-script_wse_savegame_loaded = 612
-script_wse_chat_message_received = 613
-script_wse_console_command_received = 614
-script_wse_get_agent_scale = 615
-script_wse_window_opened = 616
-script_game_missile_dives_into_water = 617
-script_wse_get_server_info = 618
-script_wse_initial_window_start = 619
+script_multiplayer_campaign_send_initial_information = 610
+script_multiplayer_campaign_server_events = 611
+script_wse_multiplayer_message_received = 612
+script_wse_game_saved = 613
+script_wse_savegame_loaded = 614
+script_wse_chat_message_received = 615
+script_wse_console_command_received = 616
+script_wse_get_agent_scale = 617
+script_wse_window_opened = 618
+script_game_missile_dives_into_water = 619
+script_wse_get_server_info = 620
+script_wse_initial_window_start = 621
 
 

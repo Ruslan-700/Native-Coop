@@ -10892,6 +10892,13 @@ scripts = [
         (else_try),
           (eq, ":event_type", multiplayer_event_show_server_message),
           (display_message, "str_server_s0", 0xFFFF6666),
+		(else_try), 
+		  (eq, ":event_type", multiplayer_event_multiplayer_campaign_server_events),
+		  (store_script_param, ":value_1", 3),
+          (store_script_param, ":value_2", 4),
+          (store_script_param, ":value_3", 5),
+          (store_script_param, ":value_4", 6),
+		  (call_script, "script_multiplayer_campaign_server_events", ":value_1", ":value_2", ":value_3", ":value_4"),
 		#INVASION MODE START
 		(else_try), 
 		  (eq, ":event_type", multiplayer_event_return_set_bot_selection),
@@ -20479,6 +20486,14 @@ scripts = [
         (party_get_slot, ":old_town_lord", ":center_no", slot_town_lord),
         (party_set_slot, ":center_no", slot_town_lord, stl_unassigned),
         (party_set_banner_icon, ":center_no", 0),#Removing banner
+		
+		(try_begin),
+			(multiplayer_is_server),
+			(try_for_players, ":current_player_no", 1),
+				(multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_set_banner_icon, ":center_no", 0),
+			(try_end),
+		(try_end),
+		
         (call_script, "script_update_faction_notes", ":old_faction"),
       (try_end),  
       
@@ -20716,6 +20731,14 @@ scripts = [
 	      (party_slot_eq, ":center_no", slot_village_state, svs_being_raided),	      
 	      (party_set_slot, ":center_no", slot_village_state, svs_normal),
 	      (party_set_extra_text, ":center_no", "str_empty_string"),
+		  
+		  (try_begin),
+			(multiplayer_is_server),
+			(try_for_players, ":current_player_no", 1),
+				(multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_set_extra_text, ":center_no", svs_normal),
+			(try_end),
+		  (try_end),
+		  
 	    (try_end),
 	  (else_try),  	    
 	    (party_get_slot, ":besieged_by", ":center_no", slot_center_is_besieged_by),
@@ -20725,6 +20748,14 @@ scripts = [
 	      (party_slot_eq, ":center_no", slot_village_state, svs_under_siege),	      
 	      (party_set_slot, ":center_no", slot_village_state, svs_normal),
 	      (party_set_extra_text, ":center_no", "str_empty_string"),
+		  
+		  (try_begin),
+			(multiplayer_is_server),
+			(try_for_players, ":current_player_no", 1),
+				(multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_set_extra_text, ":center_no", svs_normal),
+			(try_end),
+		  (try_end),
+		  
 	    (try_end),
 	  (try_end),
 	  	  
@@ -20798,6 +20829,13 @@ scripts = [
 	    (assign, ":lord_troop_faction", "fac_player_supporters_faction"),
         (party_set_banner_icon, ":center_no", 0),#Removing banner
 		
+		(try_begin),
+			(multiplayer_is_server),
+			(try_for_players, ":current_player_no", 1),
+				(multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_set_banner_icon, ":center_no", 0),
+			(try_end),
+		(try_end),
+		
       (else_try),	
 	    (eq, ":lord_troop_id", "trp_player"),
 	    (assign, ":lord_troop_faction", "$players_kingdom"), #was changed on Apr 27 from fac_plyr_sup_fac
@@ -20859,6 +20897,14 @@ scripts = [
         (val_sub, ":cur_banner", banner_scene_props_begin),
         (val_add, ":cur_banner", banner_map_icons_begin),
         (party_set_banner_icon, ":center_no", ":cur_banner"),
+		
+		(try_begin),
+			(multiplayer_is_server),
+			(try_for_players, ":current_player_no", 1),
+				(multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_set_banner_icon, ":center_no", ":cur_banner"),
+			(try_end),
+		(try_end),
+		
 # custom_banner_begin
 #        (troop_get_slot, ":flag_icon", ":lord_troop_id", slot_troop_custom_banner_map_flag_type),
 #        (ge, ":flag_icon", 0),
@@ -21724,6 +21770,14 @@ scripts = [
         (val_sub, ":cur_banner", banner_scene_props_begin),
         (val_add, ":cur_banner", banner_map_icons_begin),
         (party_set_banner_icon, "$pout_party", ":cur_banner"),
+		
+		(try_begin),
+			(multiplayer_is_server),
+			(try_for_players, ":current_player_no", 1),
+				(multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_set_banner_icon, "$pout_party", ":cur_banner"),
+			(try_end),
+		(try_end),
+		
       #custom_banner_begin
       #(troop_get_slot, ":flag_icon", ":troop_no", slot_troop_custom_banner_map_flag_type),
       #(try_begin),
@@ -22103,12 +22157,35 @@ scripts = [
         (eq, ":new_state", 0),
         (party_set_extra_text, ":village_no", "str_empty_string"),
         (party_set_slot, ":village_no", slot_village_raided_by, -1),
+		
+		(try_begin),
+		  (multiplayer_is_server),
+		  (try_for_players, ":current_player_no", 1),
+			(multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_set_extra_text, ":village_no", ":new_state"),
+		  (try_end),
+	    (try_end),
+		
       (else_try),
         (eq, ":new_state", svs_being_raided),
         (party_set_extra_text, ":village_no", "@(Being Raided)"),
+		
+		(try_begin),
+		  (multiplayer_is_server),
+		  (try_for_players, ":current_player_no", 1),
+			(multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_set_extra_text, ":village_no", ":new_state"),
+		  (try_end),
+	    (try_end),
+		
       (else_try),
         (eq, ":new_state", svs_looted),
         (party_set_extra_text, ":village_no", "@(Looted)"),
+		
+		(try_begin),
+		  (multiplayer_is_server),
+		  (try_for_players, ":current_player_no", 1),
+			(multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_set_extra_text, ":village_no", ":new_state"),
+		  (try_end),
+	    (try_end),
 				
         (party_set_slot, ":village_no", slot_village_raided_by, -1),
         (call_script, "script_change_center_prosperity", ":village_no", -60), 
@@ -22126,6 +22203,13 @@ scripts = [
       (else_try),
         (eq, ":new_state", svs_under_siege),
         (party_set_extra_text, ":village_no", "@(Under Siege)"),
+		
+		(try_begin),
+		  (multiplayer_is_server),
+		  (try_for_players, ":current_player_no", 1),
+			(multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_set_extra_text, ":village_no", ":new_state"),
+		  (try_end),
+	    (try_end),
 				
 		#Divert all caravans heading to the center
 		#Note that occasionally, no alternative center will be found. In that case, the caravan will try to run the blockade
@@ -22197,6 +22281,14 @@ scripts = [
              (party_slot_ge, ":village_no", slot_village_smoke_added, 1),
              (party_set_slot, ":village_no", slot_village_smoke_added, 0),             
              (party_clear_particle_systems, ":village_no"),
+			 
+			 (try_begin),
+			   (multiplayer_is_server),
+			   (try_for_players, ":current_player_no", 1),
+			     (multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_add_particle_system, ":village_no", 0),
+			   (try_end),
+			 (try_end),
+			 
            (try_end),
          (else_try),
            (party_slot_eq, ":village_no", slot_village_state, svs_being_raided), #village is being raided
@@ -22219,7 +22311,15 @@ scripts = [
              (call_script, "script_village_set_state", ":village_no", svs_normal), #clear raid flag
              (party_set_slot, ":village_no", slot_village_smoke_added, 0),
              (party_clear_particle_systems, ":village_no"),                          
-           (else_try),
+           
+		     (try_begin),
+			   (multiplayer_is_server),
+			   (try_for_players, ":current_player_no", 1),
+			     (multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_add_particle_system, ":village_no", 0),
+			   (try_end),
+			 (try_end),
+			 
+		   (else_try),
              (assign, ":raid_progress_increase", 11),
              (party_get_slot, ":looter_party", ":village_no", slot_village_raided_by),
              (try_begin),
@@ -22240,6 +22340,14 @@ scripts = [
                (party_add_particle_system, ":village_no", "psys_map_village_fire_smoke"),
               (party_set_icon, ":village_no", ":burnt_village_icon"), ##CABA FIX 
                (party_set_slot, ":village_no", slot_village_smoke_added, 1),
+			   
+			   (try_begin),
+			     (multiplayer_is_server),
+			     (try_for_players, ":current_player_no", 1),
+			       (multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_add_particle_system, ":village_no", 1),
+			     (try_end),
+			   (try_end),
+			   
              (try_end),
              (try_begin),
                (gt, ":village_raid_progress", 100),
@@ -22300,6 +22408,14 @@ scripts = [
              (party_clear_particle_systems, ":village_no"),
              (party_add_particle_system, ":village_no", "psys_map_village_looted_smoke"),
              (party_set_slot, ":village_no", slot_village_smoke_added, 2),
+			 
+			 (try_begin),
+			   (multiplayer_is_server),
+			   (try_for_players, ":current_player_no", 1),
+			     (multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_add_particle_system, ":village_no", 2),
+			   (try_end),
+			 (try_end),
+			 
            (try_end),
            (try_begin),
              (gt, ":recover_progress", 50),
@@ -22307,6 +22423,14 @@ scripts = [
              (party_clear_particle_systems, ":village_no"),
              (party_set_slot, ":village_no", slot_village_smoke_added, 3),
             (party_set_icon, ":village_no", ":deserted_village_icon"), ##CABA FIX 
+			
+			 (try_begin),
+			   (multiplayer_is_server),
+			   (try_for_players, ":current_player_no", 1),
+			     (multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_add_particle_system, ":village_no", 3),
+			   (try_end),
+			 (try_end),
+			 
            (try_end),
            (try_begin),
              (gt, ":recover_progress", 100),
@@ -22315,6 +22439,14 @@ scripts = [
              (party_clear_particle_systems, ":village_no"),
              (party_set_slot, ":village_no", slot_village_smoke_added, 0),
             (party_set_icon, ":village_no", ":normal_village_icon"), ##CABA FIX 
+			
+			 (try_begin),
+			   (multiplayer_is_server),
+			   (try_for_players, ":current_player_no", 1),
+			     (multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_add_particle_system, ":village_no", 0),
+			   (try_end),
+			 (try_end),
+			 
            (try_end),
          (try_end),
        (try_end),
@@ -31445,6 +31577,14 @@ scripts = [
           (val_sub, ":cur_banner", banner_scene_props_begin),
           (val_add, ":cur_banner", banner_map_icons_begin),
           (party_set_banner_icon, ":cur_center", ":cur_banner"),		  		  
+		  
+		  (try_begin),
+			(multiplayer_is_server),
+			(try_for_players, ":current_player_no", 1),
+				(multiplayer_send_3_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_set_banner_icon, ":cur_center", ":cur_banner"),
+			(try_end),
+		  (try_end),
+		  
         (try_end),
         
         (try_for_range, ":cur_center", villages_begin, villages_end),
@@ -50791,6 +50931,89 @@ scripts = [
     (cur_tableau_add_sun_light, pos8, 175,150,125),
     ]),
    #INVASION MODE END
+   
+	("multiplayer_campaign_send_initial_information",
+	[
+		(store_script_param, ":player_no", 1),
+	 
+		(try_for_parties, ":party_no"),
+			(party_get_banner_icon, ":banner_icon", ":party_no"),
+			(try_begin),
+				(gt, ":banner_icon", 0),
+				(multiplayer_send_3_int_to_player, ":player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_set_banner_icon, ":party_no", ":banner_icon"),
+			(try_end),
+			
+			(party_get_extra_icon, ":extra_icon", ":party_no"),
+			(try_begin),
+				(gt, ":extra_icon", 0),
+				(multiplayer_send_3_int_to_player, ":player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_set_extra_icon, ":party_no", ":extra_icon"),
+			(try_end),
+			
+			(party_get_slot, ":state", ":party_no", slot_village_state),
+			(try_begin),
+				(this_or_next|eq, ":state", svs_being_raided),
+				(this_or_next|eq, ":state", svs_looted),
+				(eq, ":state", svs_under_siege),
+				(multiplayer_send_3_int_to_player, ":player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_set_extra_text, ":party_no", ":state"),
+			(try_end),
+			
+			(party_get_slot, ":state", ":party_no", slot_village_smoke_added),
+			(try_begin),
+				(this_or_next|eq, ":state", 1),
+				(eq, ":state", 2),
+				(multiplayer_send_3_int_to_player, ":player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_party_add_particle_system, ":party_no", ":state"),
+			(try_end),
+		(try_end),
+    ]),
+	
+	("multiplayer_campaign_server_events",
+	[
+		(store_script_param, ":event_type", 1),
+	 
+		(try_begin),
+			(eq, ":event_type", multiplayer_event_multiplayer_campaign_server_event_party_set_banner_icon),
+			(store_script_param, ":party_no", 2),
+            (store_script_param, ":banner_icon", 3),
+			(party_set_banner_icon, ":party_no", ":banner_icon"),
+		(else_try),
+			(eq, ":event_type", multiplayer_event_multiplayer_campaign_server_event_party_set_extra_icon),
+			(store_script_param, ":party_no", 2),
+            (store_script_param, ":extra_icon", 3),
+			(party_set_extra_icon, ":party_no", ":extra_icon"),
+		(else_try),
+			(eq, ":event_type", multiplayer_event_multiplayer_campaign_server_event_party_set_extra_text),
+			(store_script_param, ":party_no", 2),
+            (store_script_param, ":state", 3),
+			(try_begin),
+				(eq, ":state", svs_normal),
+				(party_set_extra_text, ":party_no", "str_empty_string"),
+			(else_try),
+				(eq, ":state", svs_being_raided),
+				(party_set_extra_text, ":party_no", "@(Being Raided)"),
+			(else_try),
+				(eq, ":state", svs_looted),
+				(party_set_extra_text, ":party_no", "@(Looted)"),
+			(else_try),
+				(eq, ":state", svs_under_siege),	
+				(party_set_extra_text, ":party_no", "@(Under Siege)"),	
+			(try_end),
+		(else_try),
+			(eq, ":event_type", multiplayer_event_multiplayer_campaign_server_event_party_add_particle_system),
+			(store_script_param, ":party_no", 2),
+            (store_script_param, ":state", 3),
+			(try_begin),
+				(eq, ":state", 1),
+				(party_add_particle_system, ":party_no", "psys_map_village_fire"),
+                (party_add_particle_system, ":party_no", "psys_map_village_fire_smoke"),
+			(else_try),
+				(eq, ":state", 2),
+				(party_clear_particle_systems, ":party_no"),
+				(party_add_particle_system, ":party_no", "psys_map_village_looted_smoke"),
+			(else_try),
+				(party_clear_particle_systems, ":party_no"),
+			(try_end),	
+		(try_end),
+    ]),
      
 	#script_wse_multiplayer_message_received
 	# Called each time a composite multiplayer message is received

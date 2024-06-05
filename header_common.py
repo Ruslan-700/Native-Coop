@@ -159,6 +159,13 @@ multiplayer_event_return_ccoop_difficulty                     = 122
 multiplayer_event_ccoop_victory_message                       = 123
 multiplayer_event_ccoop_return_of_the_king                    = 124
 #INVASION MODE END
+multiplayer_event_multiplayer_campaign_server_events          = 125
+
+#multiplayer campaign server events
+multiplayer_event_multiplayer_campaign_server_event_party_set_banner_icon     = 0
+multiplayer_event_multiplayer_campaign_server_event_party_set_extra_icon      = 1
+multiplayer_event_multiplayer_campaign_server_event_party_set_extra_text      = 2
+multiplayer_event_multiplayer_campaign_server_event_party_add_particle_system = 3
 
 #multiplayer message types
 multiplayer_message_type_auto_team_balance_done      = 2
