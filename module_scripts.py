@@ -31,6 +31,7 @@ scripts = [
   ("game_start",
    [
       (try_begin),
+	    (game_in_multiplayer_mode),
 	    (multiplayer_is_campaign),
 	    (disable_party, "p_main_party"),
 	  (try_end),
@@ -50932,6 +50933,28 @@ scripts = [
     ]),
    #INVASION MODE END
    
+   ("multiplayer_campaign_player_joined",
+   [
+		(store_script_param, ":player_no", 1),
+
+		(store_mission_timer_a, ":player_join_time"),
+		(player_set_slot, ":player_no", slot_player_join_time, ":player_join_time"),
+		
+		(str_store_player_username, s0, ":player_no"),
+	   
+		(store_add, ":troop_no", "trp_player_0000", ":player_no"),
+		(troop_set_name, ":troop_no", s0),
+		(player_set_troop_id, ":player_no", ":troop_no"),
+	   
+		(store_add, ":party_no", "p_player_party_0000", ":player_no"),
+		(party_set_name, ":party_no", s0),
+		(player_set_party_id, ":player_no", ":party_no"),
+		(enable_party, ":party_no"),
+		(multiplayer_send_2_int_to_player, ":player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_camera_follow_party, ":party_no"),
+       
+		(call_script, "script_multiplayer_send_initial_information", ":player_no"),
+    ]),
+   
 	("multiplayer_campaign_send_initial_information",
 	[
 		(store_script_param, ":player_no", 1),
@@ -50965,6 +50988,17 @@ scripts = [
 			(try_end),
 		(try_end),
     ]),
+	
+	("multiplayer_campaign_player_exit",
+	[
+		(store_script_param, ":player_no", 1),
+
+		(player_get_party_id, ":party_no", ":player_no"),
+		(try_begin),
+			(party_is_active, ":party_no"),
+			(disable_party, ":party_no"),
+		(try_end),
+	]),
 	
 	("multiplayer_campaign_server_events",
 	[
@@ -51011,7 +51045,11 @@ scripts = [
 				(party_add_particle_system, ":party_no", "psys_map_village_looted_smoke"),
 			(else_try),
 				(party_clear_particle_systems, ":party_no"),
-			(try_end),	
+			(try_end),
+		(else_try),
+			(eq, ":event_type", multiplayer_event_multiplayer_campaign_camera_follow_party),
+			(store_script_param, ":party_no", 2),
+			(set_camera_follow_party, ":party_no", 1),
 		(try_end),
     ]),
      
