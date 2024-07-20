@@ -3191,6 +3191,8 @@ scripts = [
             
             (assign, ":do_not_end_battle", 0),
             (try_begin),
+			  (neg|game_in_multiplayer_mode),
+			  
               (neg|troop_is_wounded, "trp_player"),
               (eq, ":new_defender_strength", 0),              
               (eq, "$auto_enter_town", "$g_encountered_party"),
@@ -3255,6 +3257,9 @@ scripts = [
               (str_store_faction_name_link, s3, ":defeated_troop_faction"),
               (try_begin),
                 (ge, ":rand", hero_escape_after_defeat_chance),
+				
+				(neg|is_between, ":cur_troop_id", multiplayer_campaign_player_troops_begin, multiplayer_campaign_player_troops_end), 
+				
                 (party_stack_get_troop_id, ":leader_troop_id", ":nonempty_winner_party", 0),
                 (is_between, ":leader_troop_id", active_npcs_begin, active_npcs_end), #disable non-kingdom parties capturing enemy lords
                 (party_add_prisoners, ":nonempty_winner_party", ":cur_troop_id", 1),
@@ -15575,6 +15580,13 @@ scripts = [
       (store_script_param_1, ":root_party"),
 	  
       (party_clear, ":root_party"),
+	  
+	  (try_begin),
+	    (multiplayer_is_campaign),
+		(neg|party_is_non_player, ":root_party"),
+		(call_script, "script_multiplayer_campaign_player_party_defeated", ":root_party"),
+	  (try_end),
+	  
       (party_get_num_attached_parties, ":num_attached_parties", ":root_party"),
       (try_for_range, ":attached_party_rank", 0, ":num_attached_parties"),
         (party_get_attached_party_with_rank, ":attached_party", ":root_party", ":attached_party_rank"),
@@ -50933,28 +50945,6 @@ scripts = [
     ]),
    #INVASION MODE END
    
-   ("multiplayer_campaign_player_joined",
-   [
-		(store_script_param, ":player_no", 1),
-
-		(store_mission_timer_a, ":player_join_time"),
-		(player_set_slot, ":player_no", slot_player_join_time, ":player_join_time"),
-		
-		(str_store_player_username, s0, ":player_no"),
-	   
-		(store_add, ":troop_no", "trp_player_0000", ":player_no"),
-		(troop_set_name, ":troop_no", s0),
-		(player_set_troop_id, ":player_no", ":troop_no"),
-	   
-		(store_add, ":party_no", "p_player_party_0000", ":player_no"),
-		(party_set_name, ":party_no", s0),
-		(player_set_party_id, ":player_no", ":party_no"),
-		(enable_party, ":party_no"),
-		(multiplayer_send_2_int_to_player, ":player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_camera_follow_party, ":party_no"),
-       
-		(call_script, "script_multiplayer_send_initial_information", ":player_no"),
-    ]),
-   
 	("multiplayer_campaign_send_initial_information",
 	[
 		(store_script_param, ":player_no", 1),
@@ -50989,6 +50979,33 @@ scripts = [
 		(try_end),
     ]),
 	
+   
+   ("multiplayer_campaign_player_joined",
+   [
+		(store_script_param, ":player_no", 1),
+
+		(store_mission_timer_a, ":player_join_time"),
+		(player_set_slot, ":player_no", slot_player_join_time, ":player_join_time"),
+		
+		(str_store_player_username, s0, ":player_no"),
+	   
+		(store_add, ":troop_no", multiplayer_campaign_player_troops_begin, ":player_no"),
+		(troop_set_name, ":troop_no", s0),
+		(player_set_troop_id, ":player_no", ":troop_no"),
+	   
+		(store_add, ":party_no", multiplayer_campaign_player_parties_begin, ":player_no"),
+		(party_set_name, ":party_no", s0),
+		(player_set_party_id, ":player_no", ":party_no"),
+		(enable_party, ":party_no"),
+		(multiplayer_send_2_int_to_player, ":player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_camera_follow_party, ":party_no"),
+       
+		(call_script, "script_multiplayer_campaign_send_initial_information", ":player_no"),
+		
+		(try_for_players, ":current_player_no", 1),
+			(multiplayer_send_2_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_player_joined, ":player_no"),
+		(try_end),
+    ]),
+   
 	("multiplayer_campaign_player_exit",
 	[
 		(store_script_param, ":player_no", 1),
@@ -50997,6 +51014,34 @@ scripts = [
 		(try_begin),
 			(party_is_active, ":party_no"),
 			(disable_party, ":party_no"),
+		(try_end),
+		
+		(try_for_players, ":current_player_no", 1),
+			(multiplayer_send_2_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_player_exit, ":player_no"),
+		(try_end),
+	]),
+	
+	("multiplayer_campaign_player_party_defeated",
+	[
+		(store_script_param, ":party_no", 1),
+
+		(assign, ":max_dist", 0),
+		(party_get_position, pos1, ":party_no"),
+		(try_for_range, ":unused", 0, 10),
+			(map_get_random_position_around_position, pos0, pos1, 10),
+			(get_distance_between_positions, ":dist", pos0, pos1),
+			(ge, ":dist", ":max_dist"),
+			(assign, ":max_dist", ":dist"),
+			(copy_position, pos2, pos0),
+		(try_end),  
+
+		(party_set_position, ":party_no", pos2),
+		
+		(party_get_player_id, ":player_no", ":party_no"),
+		(multiplayer_send_2_int_to_player, ":player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_camera_follow_party, ":party_no"),
+		
+		(try_for_players, ":current_player_no", 1),
+			(multiplayer_send_2_int_to_player, ":current_player_no", multiplayer_event_multiplayer_campaign_server_events, multiplayer_event_multiplayer_campaign_server_event_player_party_defeated, ":player_no"),
 		(try_end),
 	]),
 	
@@ -51018,6 +51063,7 @@ scripts = [
 			(eq, ":event_type", multiplayer_event_multiplayer_campaign_server_event_party_set_extra_text),
 			(store_script_param, ":party_no", 2),
             (store_script_param, ":state", 3),
+			
 			(try_begin),
 				(eq, ":state", svs_normal),
 				(party_set_extra_text, ":party_no", "str_empty_string"),
@@ -51035,6 +51081,7 @@ scripts = [
 			(eq, ":event_type", multiplayer_event_multiplayer_campaign_server_event_party_add_particle_system),
 			(store_script_param, ":party_no", 2),
             (store_script_param, ":state", 3),
+			
 			(try_begin),
 				(eq, ":state", 1),
 				(party_add_particle_system, ":party_no", "psys_map_village_fire"),
@@ -51047,9 +51094,30 @@ scripts = [
 				(party_clear_particle_systems, ":party_no"),
 			(try_end),
 		(else_try),
-			(eq, ":event_type", multiplayer_event_multiplayer_campaign_camera_follow_party),
+			(eq, ":event_type", multiplayer_event_multiplayer_campaign_server_event_camera_follow_party),
 			(store_script_param, ":party_no", 2),
 			(set_camera_follow_party, ":party_no", 1),
+		(else_try),
+			(eq, ":event_type", multiplayer_event_multiplayer_campaign_server_event_player_joined),
+			(store_script_param, ":player_no", 2),
+			(str_store_player_username, s0, ":player_no"),
+			(display_message, "@{s0} has joined the game."),
+			
+			(try_for_players, ":current_player_no", 1),
+				(player_get_troop_id, ":troop_no", ":current_player_no"),
+				(ge, ":troop_no", 0),
+				(troop_set_name, ":troop_no", s0),
+			(try_end),
+		(else_try),
+			(eq, ":event_type", multiplayer_event_multiplayer_campaign_server_event_player_exit),
+			(store_script_param, ":player_no", 2),
+			(str_store_player_username, s0, ":player_no"),
+			(display_message, "@{s0} has left the game."),
+		(else_try),
+			(eq, ":event_type", multiplayer_event_multiplayer_campaign_server_event_player_party_defeated),
+			(store_script_param, ":player_no", 2),
+			(str_store_player_username, s0, ":player_no"),
+			(display_message, "@{s0} was defeated in battle but managed to escape."),	
 		(try_end),
     ]),
      

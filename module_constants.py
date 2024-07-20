@@ -1900,3 +1900,8 @@ ACHIEVEMENT_LADY_OF_THE_LAKE = 80,
 
 players_number = 250
 
+multiplayer_campaign_player_troops_begin = "trp_player_0000"
+multiplayer_campaign_player_troops_end = "trp_find_item_cheat"
+
+multiplayer_campaign_player_parties_begin = "p_player_party_0000"
+multiplayer_campaign_player_parties_end = "p_temp_party_2"
