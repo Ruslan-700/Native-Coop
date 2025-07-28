@@ -613,15 +613,16 @@ script_multiplayer_campaign_player_joined = 611
 script_multiplayer_campaign_player_exit = 612
 script_multiplayer_campaign_player_party_defeated = 613
 script_multiplayer_campaign_server_events = 614
-script_wse_multiplayer_message_received = 615
-script_wse_game_saved = 616
-script_wse_savegame_loaded = 617
-script_wse_chat_message_received = 618
-script_wse_console_command_received = 619
-script_wse_get_agent_scale = 620
-script_wse_window_opened = 621
-script_game_missile_dives_into_water = 622
-script_wse_get_server_info = 623
-script_wse_initial_window_start = 624
+script_multiplayer_campaign_client_events = 615
+script_wse_multiplayer_message_received = 616
+script_wse_game_saved = 617
+script_wse_savegame_loaded = 618
+script_wse_chat_message_received = 619
+script_wse_console_command_received = 620
+script_wse_get_agent_scale = 621
+script_wse_window_opened = 622
+script_game_missile_dives_into_water = 623
+script_wse_get_server_info = 624
+script_wse_initial_window_start = 625
 
 

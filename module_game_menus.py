@@ -14505,7 +14505,52 @@ game_menus = [
     ]
   ),
 
-  
+  (
+    "multiplayer_campaign_encounter",mnf_enable_hot_keys|mnf_scale_picture,
+    "{s2} You have {reg10} troops fit for battle against their {reg11}.",
+    "none",
+    [      
+        (set_background_mesh, "mesh_pic_bandits"),
+    ],
+    [
+      ("encounter_attack",
+      [
+        
+      ],
+      "Charge the enemy.",
+      [
+        
+      ]),
+      
+      ("encounter_order_attack",
+      [
+        
+      ],
+      "Order your troops to attack without you.",
+      [
+        
+      ]),
+      
+      ("encounter_leave",
+      [
+            
+      ],
+      "Leave.",
+      [
+          (multiplayer_send_int_to_server, multiplayer_event_multiplayer_campaign_client_events, multiplayer_event_multiplayer_campaign_leave_encounter),
+          (change_screen_return), 
+      ]),
+         
+      ("encounter_surrender",
+      [
+         
+      ],
+      "Surrender.",
+      [
+      
+      ]),
+    ]
+  ),
   
 
   

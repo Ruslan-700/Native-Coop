@@ -55,6 +55,7 @@ multiplayer_event_offer_duel                                  = 46
 multiplayer_event_admin_set_disallow_ranged_weapons           = 47
 #INVASION MODE START
 multiplayer_event_other_events                                = 48
+multiplayer_event_multiplayer_campaign_client_events          = 49
 
 
 #other client events
@@ -170,6 +171,10 @@ multiplayer_event_multiplayer_campaign_server_event_camera_follow_party       = 
 multiplayer_event_multiplayer_campaign_server_event_player_joined             = 5
 multiplayer_event_multiplayer_campaign_server_event_player_exit               = 6
 multiplayer_event_multiplayer_campaign_server_event_player_party_defeated     = 7
+multiplayer_event_multiplayer_campaign_server_event_player_start_encounter    = 8
+
+#multiplayer campaign client events
+multiplayer_event_multiplayer_campaign_leave_encounter = 0
 
 #multiplayer message types
 multiplayer_message_type_auto_team_balance_done      = 2
