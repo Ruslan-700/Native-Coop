@@ -51313,9 +51313,20 @@ scripts = [
 	# OUTPUT
 	# trigger result = presentation that replaces the window (if not set or negative, window will open normally)
 	("wse_window_opened", [
-		# (store_script_param, ":window_no", 1),
-		# (store_script_param, ":window_param_1", 2),
-		# (store_script_param, ":window_param_2", 3),
+		(store_script_param, ":window_no", 1),
+		(store_script_param, ":window_param_1", 2),
+		(store_script_param, ":window_param_2", 3),
+        
+        (try_begin),
+            (eq, ":window_no", window_inventory),
+            (set_trigger_result, "prsnt_multiplayer_campaign_inventory_window"),
+        (else_try),
+            (eq, ":window_no", window_party),
+            (set_trigger_result, "prsnt_multiplayer_campaign_party_window"),
+        (try_end),
+            (eq, ":window_no", window_character),
+            (set_trigger_result, "prsnt_multiplayer_campaign_character_window"),
+        (try_end),
 	]),
 
 	#script_game_missile_dives_into_water

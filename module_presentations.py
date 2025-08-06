@@ -13618,4 +13618,76 @@ presentations = [
     ]),
     #INVASION MODE END
 
+    ("multiplayer_campaign_inventory_window", 0, mesh_load_window, [
+        (ti_on_presentation_load, [      
+            (set_fixed_point_multiplier, 1000),
+            
+            (presentation_set_duration, 999999),
+        ]),
+      
+        (ti_on_presentation_run, [
+            (store_trigger_param_1, ":cur_time"),
+            
+            (try_begin),
+                (this_or_next|key_clicked, key_space),
+                (this_or_next|key_clicked, key_enter),
+                (this_or_next|key_clicked, key_escape),
+                (this_or_next|key_clicked, key_back_space),
+                (this_or_next|key_clicked, key_left_mouse_button),
+                (this_or_next|key_clicked, key_right_mouse_button),
+                (this_or_next|key_clicked, key_xbox_ltrigger),
+                (key_clicked, key_xbox_rtrigger),
+                (presentation_set_duration, 0),
+            (try_end),
+        ]),
+    ]),
+
+    ("multiplayer_campaign_party_window", 0, mesh_load_window, [
+        (ti_on_presentation_load, [      
+            (set_fixed_point_multiplier, 1000),
+            
+            (presentation_set_duration, 999999),
+        ]),
+      
+        (ti_on_presentation_run, [
+            (store_trigger_param_1, ":cur_time"),
+            
+            (try_begin),
+                (this_or_next|key_clicked, key_space),
+                (this_or_next|key_clicked, key_enter),
+                (this_or_next|key_clicked, key_escape),
+                (this_or_next|key_clicked, key_back_space),
+                (this_or_next|key_clicked, key_left_mouse_button),
+                (this_or_next|key_clicked, key_right_mouse_button),
+                (this_or_next|key_clicked, key_xbox_ltrigger),
+                (key_clicked, key_xbox_rtrigger),
+                (presentation_set_duration, 0),
+            (try_end),
+        ]),
+    ]),
+    
+    ("multiplayer_campaign_character_window", 0, mesh_load_window, [
+        (ti_on_presentation_load, [      
+            (set_fixed_point_multiplier, 1000),
+            
+            (presentation_set_duration, 999999),
+        ]),
+      
+        (ti_on_presentation_run, [
+            (store_trigger_param_1, ":cur_time"),
+            
+            (try_begin),
+                (this_or_next|key_clicked, key_space),
+                (this_or_next|key_clicked, key_enter),
+                (this_or_next|key_clicked, key_escape),
+                (this_or_next|key_clicked, key_back_space),
+                (this_or_next|key_clicked, key_left_mouse_button),
+                (this_or_next|key_clicked, key_right_mouse_button),
+                (this_or_next|key_clicked, key_xbox_ltrigger),
+                (key_clicked, key_xbox_rtrigger),
+                (presentation_set_duration, 0),
+            (try_end),
+        ]),
+    ]),
+
   ]
