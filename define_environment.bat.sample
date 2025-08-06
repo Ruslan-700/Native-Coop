@@ -1,0 +1,6 @@
+SET GAME_DIRECTORY=C:\Program Files\Mount ^& Blade Warband
+SET SERVER_DIRECTORY=C:\Program Files\Mount ^& Blade Warband Server
+SET CAMPAIGN_SERVER_DIRECTORY=C:\Program Files\Mount ^& Blade Warband Campaign Server
+SET SERVER_BAT_FILE_NAME=Battle_start
+SET CAMPAIGN_SERVER_BAT_FILE_NAME=Campaign
+SET MODULE_NAME=Native Coop

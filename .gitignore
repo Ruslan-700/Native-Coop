@@ -1,5 +1,6 @@
 syntax: glob
 *.pyc
+define_environment.bat
 output/scenes.txt
 output/actions.txt
 output/conversation.txt
